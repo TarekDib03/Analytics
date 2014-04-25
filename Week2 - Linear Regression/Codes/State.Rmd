@@ -1,0 +1,26 @@
+State datasets, Analytics Edge, MITx: 15.073x
+========================================================
+
+### Tarek Dib
+
+## *Intoduction*
+
+
+
+```{r}
+data(state)
+statedata = cbind(data.frame(state.x77), state.abb, state.area, state.center,  state.division, state.name, state.region)
+# Region with the highest average highschool graduation
+which.max(tapply(HS.Grad, state.region, mean))
+# State with highest murder in the northeast region
+NortheastData = statedata[state.region=="Northeast",]
+levels(factor(NortheastData$state.abb[which.max(NortheastData$Murder)]))
+```
+
+```{r fig.width=12, fig.height=6}
+plot(statedata$x, statedata$y, pch=19, col='blue', xlab="Longitude", ylab="Latitude")
+```
+
+```{r fig.width=12, fig.height=6}
+boxplot(Murder ~ state.region, col="blue")
+```

@@ -1,0 +1,82 @@
+MITx: 15.071x The Analytics Edge
+------------------------------------------------------------------
+# Predicting the Baseball World Series Champion
+#### Tarek Dib
+#### Date: March 24, 2014
+
+### *Introduction*
+
+Variables in the data set:
+
+    Team: A code for the name of the team
+    League: The Major League Baseball league the team belongs to, either AL (American League) or NL (National League)
+    Year: The year of the corresponding record
+    RS: The number of runs scored by the team in that year
+    RA: The number of runs allowed by the team in that year
+    W: The number of regular season wins by the team in that year
+    OBP: The on-base percentage of the team in that year
+    SLG: The slugging percentage of the team in that year
+    BA: The batting average of the team in that year
+    Playoffs: Whether the team made the playoffs in that year (1 for yes, 0 for no)
+    RankSeason: Among the playoff teams in that year, the ranking of their regular season records (1 is best)
+    RankPlayoffs: Among the playoff teams in that year, how well they fared in the playoffs. The team winning the World Series gets a RankPlayoffs of 1.
+    G: The number of games a team played in that year
+    OOBP: The team's opponents' on-base percentage in that year
+    OSLG: The team's opponents' slugging percentage in that year
+
+
+## *Limiting to Teams Making the Playoffs*
+```{r}
+# Read the data
+baseball <- read.csv("baseball.csv")
+
+# Structure of the data set
+str(baseball)
+
+# Total Number of years included in the data
+length(table(baseball$Year))
+
+# Teams that made it to the playoff
+baseball <- subset(baseball, baseball$Playoffs == 1)
+
+# The number of teams making the playoffs from 1962 to 2012
+table(baseball$Year)
+```
+
+## *Adding an Important Predictor*
+It's much harder to win the World Series if there are 10 teams competing for the championship versus just two. Therefore, we will add the predictor variable NumCompetitors to the baseball data frame. NumCompetitors will contain the number of total teams making the playoffs in the year of a particular team/year pair. For instance, NumCompetitors should be 2 for the 1962 New York Yankees, but it should be 8 for the 1998 Boston Red Sox.
+```{r}
+PlayoffTable = table(baseball$Year)
+names(PlayoffTable)
+
+# Because PlayoffTable is an object and not a function, we look up elements in it with square brackets instead of parentheses.
+PlayoffTable[c("1990", "2010")]
+
+# Look up the number of teams in the playoffs for each team/year pair in the dataset, and store it as a new variable named NumCompetitors in the baseball data frame.
+baseball$NumCompetitors = PlayoffTable[as.character(baseball$Year)]
+
+# Obtain the number of team/year pairs with 8 teams in the playoffs
+table(baseball$NumCompetitors)
+# Or
+baseball.8 <- subset(baseball, baseball$NumCompetitors == 8)
+sum(table(baseball.8$Team))
+```
+
+## *Bivariate Models for Predicting World Series Winner*
+In this problem, we seek to predict whether a team won the World Series; in our dataset this is denoted with a RankPlayoffs value of 1
+```{r}
+# Add a variable named WorldSeries to the baseball data frame
+baseball$WorldSeries = as.numeric(baseball$RankPlayoffs == 1)
+# Number of teams who won the World Series
+length(baseball$WorldSeries[baseball$WorldSeries == 0])
+
+# Build the model
+LogModel = glm(WorldSeries ~ Year + RA + RankSeason + NumCompetitors, data=baseball, family=binomial)
+summary(LogModel)
+# Find the correlation matrix of the variables in the model
+cor(baseball[c("Year", "RA", "RankSeason", "NumCompetitors")])
+
+# Model selection 
+library(MASS)
+stepAIC(LogModel, direction="backward")
+```

@@ -1,0 +1,76 @@
+MITx: 15.071x The Analytics Edge, Week1, Internet Privacy
+========================================================
+# Tarek Dib
+
+## *Introduction*
+Internet privacy has gained widespread attention in recent years. To measure the degree to which people are concerned about hot-button issues like Internet privacy, social scientists conduct polls in which they interview a large number of people about the topic. In this assignment, we will analyze data from a July 2013 Pew Internet and American Life Project poll on Internet anonymity and privacy, which involved interviews across the United States. While the full polling data can be found here, we will use a more limited version of the results, available in AnonymityPoll.csv.
+
+## *Variables*
+The dataset has the following fields (all Internet use-related fields were only collected from interviewees who either use the Internet or have a smartphone):
+
+    Internet.Use: A binary variable indicating if the interviewee uses the Internet, at least occasionally (equals 1 if the interviewee uses the Internet, and equals 0 if the interviewee does not use the Internet).
+    Smartphone: A binary variable indicating if the interviewee has a smartphone (equals 1 if they do have a smartphone, and equals 0 if they don't have a smartphone).
+    Sex: Male or Female.
+    Age: Age in years.
+    State: State of residence of the interviewee.
+    Region: Census region of the interviewee (Midwest, Northeast, South, or West).
+    Conservativeness: Self-described level of conservativeness of interviewee, from 1 (very liberal) to 5 (very conservative).
+    Info.On.Internet: Number of the following items this interviewee believes to be available on the Internet for others to see: (1) Their email address; (2) Their home address; (3) Their home phone number; (4) Their cell phone number; (5) The employer/company they work for; (6) Their political party or political affiliation; (7) Things they've written that have their name on it; (8) A photo of them; (9) A video of them; (10) Which groups or organizations they belong to; and (11) Their birth date.
+    Worry.About.Info: A binary variable indicating if the interviewee worries about how much information is available about them on the Internet (equals 1 if they worry, and equals 0 if they don't worry).
+    Privacy.Importance: A score from 0 (privacy is not too important) to 100 (privacy is very important), which combines the degree to which they find privacy important in the following: (1) The websites they browse; (2) Knowledge of the place they are located when they use the Internet; (3) The content and files they download; (4) The times of day they are online; (5) The applications or programs they use; (6) The searches they perform; (7) The content of their email; (8) The people they exchange email with; and (9) The content of their online chats or hangouts with others.  
+    Anonymity.Possible: A binary variable indicating if the interviewee thinks it's possible to use the Internet anonymously, meaning in such a way that online activities can't be traced back to them (equals 1 if he/she believes you can, and equals 0 if he/she believes you can't).
+    Anonymity.Possible: A binary variable indicating if the interviewee thinks it's possible to use the Internet anonymously, meaning in such a way that online activities can't be traced back to them (equals 1 if he/she believes you can, and equals 0 if he/she believes you can't).
+    Tried.Masking.Identity: A binary variable indicating if the interviewee has ever tried to mask his/her identity when using the Internet (equals 1 if he/she has tried to mask his/her identity, and equals 0 if he/she has not tried to mask his/her identity).
+    Privacy.Laws.Effective: A binary variable indicating if the interviewee believes United States law provides reasonable privacy protection for Internet users (equals 1 if he/she believes it does, and equals 0 if he/she believes it doesn't).
+
+
+## *Loading Data and Descriptive Statistics*
+```{r}
+# Set the directory at where the data is located
+setwd("/home/tarek/Analytics/Week1/Rlectures/Data")
+# Read the Data
+poll <- read.csv("AnonymityPoll.csv")
+str(poll)
+summary(poll)
+# Summary statistics on smartphone
+table(poll$Smartphone)
+summary(poll$Smartphone)
+
+# States in the midwest
+MidwestInterviewees = subset(poll, Region=="Midwest")
+table(MidwestInterviewees$State)
+
+# Interviewees from each South region state
+SouthInterviewees = subset(poll, Region=="South")
+table(SouthInterviewees$State) 
+# Summary table of smartphone and internet uses
+table(poll$Internet.Use, poll$Smartphone) 
+# limit to interviewees who reported Internet use or who reported smartphone use.
+limited = subset(poll, Internet.Use == 1 | Smartphone == 1)
+summary(limited)
+mean(limited$Info.On.Internet)
+table(limited$Info.On.Internet)
+# Proportion of interviewees who answered the Worry.About.Info question worry about how much information is available about them on the Internet
+sum(limited$Worry.About.Info==1, na.rm=T)/sum(limited$Worry.About.Info==1 | limited$Worry.About.Info==0, na.rm=T)
+#proportion of interviewees who answered the Anonymity.Possible question who think it is possible to be completely anonymous on the Internet
+table(limited$Anonymity.Possible)
+278/(475+278)
+# proportion of interviewees who answered the Tried.Masking.Identity question have tried masking their identity on the Internet
+table(limited$Tried.Masking.Identity )
+128/(656+128)
+#proportion of interviewees who answered the Privacy.Laws.Effective question find United States privacy laws effective
+table(limited$Privacy.Laws.Effective)
+186/(541+186)
+# largest number of interviewees that have exactly the same value in their Age variable AND the same value in their Info.On.Internet variable
+max(table(limited$Age, limited$Info.On.Internet))
+# Use the tapply() function to obtain the summary of the Info.On.Internet value, broken down by whether an interviewee is a smartphone user.
+tapply(limited$Info.On.Internet, limited$Smartphone, mean)
+#proportion of smartphone users who answered the Tried.Masking.Identity question have tried masking their identity when using the Internet. And non-smartphone users
+tapply(limited$Tried.Masking.Identity, limited$Smartphone, summary)
+```
+
+```{r fig.width=10, fig.height=6}
+hist(limited$Age, breaks=50)
+plot(jitter(limited$Age), jitter(limited$Info.On.Internet))
+```
+

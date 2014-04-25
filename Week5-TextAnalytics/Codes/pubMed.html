@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>MITx: 15.071x The Analytics Edge - AUTOMATING REVIEWS IN MEDICINE</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>MITx: 15.071x The Analytics Edge - AUTOMATING REVIEWS IN MEDICINE</h1>
+
+<h2><em>Introduction</em></h2>
+
+<p>The medical literature is enormous. Pubmed, a database of medical publications maintained by the U.S. National Library of Medicine, has indexed over 23 million medical publications. Further, the rate of medical publication has increased over time, and now there are nearly 1 million new publications in the field each year, or more than one per minute.</p>
+
+<p>The large size and fast-changing nature of the medical literature has increased the need for reviews, which search databases like Pubmed for papers on a particular topic and then report results from the papers found. While such reviews are often performed manually, with multiple people reviewing each search result, this is tedious and time consuming. In this problem, we will see how text analytics can be used to automate the process of information retrieval.</p>
+
+<p>The dataset consists of the titles (variable title) and abstracts (variable abstract) of papers retrieved in a Pubmed search. Each search result is labeled with whether the paper is a clinical trial testing a drug therapy for cancer (variable trial). These labels were obtained by two people reviewing each search result and accessing the actual paper if necessary, as part of a literature review of clinical trials testing drug therapies for advanced and metastatic breast cancer.</p>
+
+<h2><em>Understanding the Data</em></h2>
+
+<pre><code class="r"># Data
+setwd(&quot;/home/tarek/Analytics/Weeks/Week5-TextAnalytics/Data&quot;)
+trials &lt;- read.csv(&quot;clinical_trial.csv&quot;, stringsAsFactors = F)
+str(trials)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    1860 obs. of  3 variables:
+##  $ title   : chr  &quot;Treatment of Hodgkin&#39;s disease and other cancers with 1,3-bis(2-chloroethyl)-1-nitrosourea (BCNU; NSC-409962).&quot; &quot;Cell mediated immune status in malignancy--pretherapy and post-therapy assessment.&quot; &quot;Neoadjuvant vinorelbine-capecitabine versus docetaxel-doxorubicin-cyclophosphamide in early nonresponsive breast cancer: phase &quot;| __truncated__ &quot;Randomized phase 3 trial of fluorouracil, epirubicin, and cyclophosphamide alone or followed by Paclitaxel for early breast can&quot;| __truncated__ ...
+##  $ abstract: chr  &quot;&quot; &quot;Twenty-eight cases of malignancies of different kinds were studied to assess T-cell activity and population before and after in&quot;| __truncated__ &quot;BACKGROUND: Among breast cancer patients, nonresponse to initial neoadjuvant chemotherapy is associated with unfavorable outcom&quot;| __truncated__ &quot;BACKGROUND: Taxanes are among the most active drugs for the treatment of metastatic breast cancer, and, as a consequence, they &quot;| __truncated__ ...
+##  $ trial   : int  1 0 1 1 1 0 1 0 0 0 ...
+</code></pre>
+
+<pre><code class="r">
+# How many characters are there in the longest abstract?
+max(nchar(trials$abstract))
+</code></pre>
+
+<pre><code>## [1] 3708
+</code></pre>
+
+<pre><code class="r">
+# How many search results provided no abstract?
+sum(nchar(trials$abstract) == 0)
+</code></pre>
+
+<pre><code>## [1] 112
+</code></pre>
+
+<pre><code class="r">
+# What is the shortest title of any article?
+trials$title[which.min(nchar(trials$title))]
+</code></pre>
+
+<pre><code>## [1] &quot;A decade of letrozole: FACE.&quot;
+</code></pre>
+
+<h2><em>Preparing the Corpus</em></h2>
+
+<pre><code class="r"># Pre process data
+library(tm)
+# Create Corpus
+corpusTitle &lt;- Corpus(VectorSource(trials$title))
+corpusAbstract &lt;- Corpus(VectorSource(trials$abstract))
+
+# Convert to lower case
+corpusTitle &lt;- tm_map(corpusTitle, tolower)
+corpusAbstract &lt;- tm_map(corpusAbstract, tolower)
+
+# Remove punctuation
+corpusTitle &lt;- tm_map(corpusTitle, removePunctuation)
+corpusAbstract &lt;- tm_map(corpusAbstract, removePunctuation)
+
+# Remove Stop words
+corpusTitle &lt;- tm_map(corpusTitle, removeWords, stopwords(&quot;english&quot;))
+corpusAbstract &lt;- tm_map(corpusAbstract, removeWords, stopwords(&quot;english&quot;))
+
+# Stem the words
+corpusTitle &lt;- tm_map(corpusTitle, stemDocument)
+corpusAbstract &lt;- tm_map(corpusAbstract, stemDocument)
+
+# Look at the first document
+corpusTitle[[1]]
+</code></pre>
+
+<pre><code>## treatment  hodgkin diseas   cancer  13bis2chloroethyl1nitrosourea bcnu nsc409962
+</code></pre>
+
+<pre><code class="r">
+# Create matrix
+dtmTitle &lt;- DocumentTermMatrix(corpusTitle)
+dtmAbstract &lt;- DocumentTermMatrix(corpusAbstract)
+dtmTitle
+</code></pre>
+
+<pre><code>## A document-term matrix (1860 documents, 2835 terms)
+## 
+## Non-/sparse entries: 23415/5249685
+## Sparsity           : 100%
+## Maximal term length: 49 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r">dtmAbstract
+</code></pre>
+
+<pre><code>## A document-term matrix (1860 documents, 12291 terms)
+## 
+## Non-/sparse entries: 153196/22708064
+## Sparsity           : 99%
+## Maximal term length: 67 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r">
+# Filter out sparse terms by keeping only terms that appear in at least 5%
+# or more of the documents
+dtmTitle &lt;- removeSparseTerms(dtmTitle, 0.95)
+dtmAbstract &lt;- removeSparseTerms(dtmAbstract, 0.95)
+dtmTitle
+</code></pre>
+
+<pre><code>## A document-term matrix (1860 documents, 31 terms)
+## 
+## Non-/sparse entries: 10683/46977
+## Sparsity           : 81%
+## Maximal term length: 15 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r">dtmAbstract
+</code></pre>
+
+<pre><code>## A document-term matrix (1860 documents, 335 terms)
+## 
+## Non-/sparse entries: 91977/531123
+## Sparsity           : 85%
+## Maximal term length: 15 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r">
+# Convert dtmTitle and dtmAbstract to data frames
+dtmTitle &lt;- as.data.frame(as.matrix(dtmTitle))
+dtmAbstract &lt;- as.data.frame(as.matrix(dtmAbstract))
+</code></pre>
+
+<h2><em>Building a Model</em></h2>
+
+<pre><code class="r"># We want to combine dtmTitle and dtmAbstract into a single data frame to
+# make predictions. However, some of the variables in these data frames have
+# the same names.
+
+colnames(dtmTitle) &lt;- paste0(&quot;T&quot;, colnames(dtmTitle))
+colnames(dtmAbstract) &lt;- paste0(&quot;A&quot;, colnames(dtmAbstract))
+colnames(dtmTitle)
+</code></pre>
+
+<pre><code>##  [1] &quot;Tadjuv&quot;           &quot;Tadvanc&quot;          &quot;Tbreast&quot;         
+##  [4] &quot;Tcancer&quot;          &quot;Tchemotherapi&quot;    &quot;Tclinic&quot;         
+##  [7] &quot;Tcombin&quot;          &quot;Tcompar&quot;          &quot;Tcyclophosphamid&quot;
+## [10] &quot;Tdocetaxel&quot;       &quot;Tdoxorubicin&quot;     &quot;Tearli&quot;          
+## [13] &quot;Teffect&quot;          &quot;Tgroup&quot;           &quot;Tiii&quot;            
+## [16] &quot;Tmetastat&quot;        &quot;Tpatient&quot;         &quot;Tphase&quot;          
+## [19] &quot;Tplus&quot;            &quot;Tpostmenopaus&quot;    &quot;Trandom&quot;         
+## [22] &quot;Trandomis&quot;        &quot;Trespons&quot;         &quot;Tresult&quot;         
+## [25] &quot;Tstudi&quot;           &quot;Ttamoxifen&quot;       &quot;Ttherapi&quot;        
+## [28] &quot;Ttreatment&quot;       &quot;Ttrial&quot;           &quot;Tversus&quot;         
+## [31] &quot;Twomen&quot;
+</code></pre>
+
+<pre><code class="r">colnames(dtmAbstract)
+</code></pre>
+
+<pre><code>##   [1] &quot;A0001&quot;            &quot;A001&quot;             &quot;A005&quot;            
+##   [4] &quot;A100&quot;             &quot;A500&quot;             &quot;A5fluorouracil&quot;  
+##   [7] &quot;Aaccord&quot;          &quot;Aachiev&quot;          &quot;Aactiv&quot;          
+##  [10] &quot;Aaddit&quot;           &quot;Aadjuv&quot;           &quot;Aadminist&quot;       
+##  [13] &quot;Aadministr&quot;       &quot;Aadvanc&quot;          &quot;Aadvers&quot;         
+##  [16] &quot;Aage&quot;             &quot;Aagent&quot;           &quot;Aaim&quot;            
+##  [19] &quot;Aalon&quot;            &quot;Aalso&quot;            &quot;Aalthough&quot;       
+##  [22] &quot;Aamong&quot;           &quot;Aanalys&quot;          &quot;Aanalysi&quot;        
+##  [25] &quot;Aanalyz&quot;          &quot;Aandor&quot;           &quot;Aanthracyclin&quot;   
+##  [28] &quot;Aappear&quot;          &quot;Aarm&quot;             &quot;Aaromatas&quot;       
+##  [31] &quot;Aassess&quot;          &quot;Aassign&quot;          &quot;Aassoci&quot;         
+##  [34] &quot;Aavail&quot;           &quot;Aaxillari&quot;        &quot;Abackground&quot;     
+##  [37] &quot;Abase&quot;            &quot;Abaselin&quot;         &quot;Abenefit&quot;        
+##  [40] &quot;Abetter&quot;          &quot;Abone&quot;            &quot;Abreast&quot;         
+##  [43] &quot;Acan&quot;             &quot;Acancer&quot;          &quot;Acarcinoma&quot;      
+##  [46] &quot;Acase&quot;            &quot;Acaus&quot;            &quot;Acell&quot;           
+##  [49] &quot;Achang&quot;           &quot;Acharacterist&quot;    &quot;Achemotherapi&quot;   
+##  [52] &quot;Aclinic&quot;          &quot;Acmf&quot;             &quot;Acombin&quot;         
+##  [55] &quot;Acommon&quot;          &quot;Acompar&quot;          &quot;Acomparison&quot;     
+##  [58] &quot;Acomplet&quot;         &quot;Aconclus&quot;         &quot;Aconduct&quot;        
+##  [61] &quot;Aconfid&quot;          &quot;Aconfirm&quot;         &quot;Aconsid&quot;         
+##  [64] &quot;Aconsist&quot;         &quot;Acontinu&quot;         &quot;Acontrol&quot;        
+##  [67] &quot;Acorrel&quot;          &quot;Acours&quot;           &quot;Acycl&quot;           
+##  [70] &quot;Acyclophosphamid&quot; &quot;Adaili&quot;           &quot;Adata&quot;           
+##  [73] &quot;Aday&quot;             &quot;Adeath&quot;           &quot;Adecreas&quot;        
+##  [76] &quot;Adefin&quot;           &quot;Ademonstr&quot;        &quot;Adesign&quot;         
+##  [79] &quot;Adetect&quot;          &quot;Adetermin&quot;        &quot;Adevelop&quot;        
+##  [82] &quot;Adfs&quot;             &quot;Adiffer&quot;          &quot;Adiseas&quot;         
+##  [85] &quot;Adiseasefre&quot;      &quot;Adistant&quot;         &quot;Adocetaxel&quot;      
+##  [88] &quot;Adose&quot;            &quot;Adoubleblind&quot;     &quot;Adoxorubicin&quot;    
+##  [91] &quot;Adrug&quot;            &quot;Adue&quot;             &quot;Adurat&quot;          
+##  [94] &quot;Aearli&quot;           &quot;Aeffect&quot;          &quot;Aefficaci&quot;       
+##  [97] &quot;Aeight&quot;           &quot;Aeither&quot;          &quot;Aelig&quot;           
+## [100] &quot;Aend&quot;             &quot;Aendocrin&quot;        &quot;Aendpoint&quot;       
+## [103] &quot;Aenrol&quot;           &quot;Aenter&quot;           &quot;Aepirubicin&quot;     
+## [106] &quot;Aestim&quot;           &quot;Aestrogen&quot;        &quot;Aevalu&quot;          
+## [109] &quot;Aevent&quot;           &quot;Aeveri&quot;           &quot;Aevid&quot;           
+## [112] &quot;Aexamin&quot;          &quot;Aexperienc&quot;       &quot;Aexpress&quot;        
+## [115] &quot;Afactor&quot;          &quot;Afailur&quot;          &quot;Afind&quot;           
+## [118] &quot;Afirst&quot;           &quot;Afirstlin&quot;        &quot;Afive&quot;           
+## [121] &quot;Afluorouracil&quot;    &quot;Afollow&quot;          &quot;Afollowup&quot;       
+## [124] &quot;Afound&quot;           &quot;Afour&quot;            &quot;Afrequent&quot;       
+## [127] &quot;Afunction&quot;        &quot;Ageneral&quot;         &quot;Agiven&quot;          
+## [130] &quot;Agrade&quot;           &quot;Agreater&quot;         &quot;Agroup&quot;          
+## [133] &quot;Agrowth&quot;          &quot;Ahazard&quot;          &quot;Ahematolog&quot;      
+## [136] &quot;Aher2&quot;            &quot;Ahigh&quot;            &quot;Ahigher&quot;         
+## [139] &quot;Ahistolog&quot;        &quot;Ahormon&quot;          &quot;Ahowev&quot;          
+## [142] &quot;Ahuman&quot;           &quot;Ahundr&quot;           &quot;Aidentifi&quot;       
+## [145] &quot;Aiii&quot;             &quot;Aimport&quot;          &quot;Aimprov&quot;         
+## [148] &quot;Aincid&quot;           &quot;Ainclud&quot;          &quot;Aincreas&quot;        
+## [151] &quot;Aindepend&quot;        &quot;Aindic&quot;           &quot;Ainform&quot;         
+## [154] &quot;Ainfus&quot;           &quot;Ainhibitor&quot;       &quot;Ainiti&quot;          
+## [157] &quot;Ainterv&quot;          &quot;Aintraven&quot;        &quot;Ainvestig&quot;       
+## [160] &quot;Ainvolv&quot;          &quot;Alarg&quot;            &quot;Aleast&quot;          
+## [163] &quot;Aless&quot;            &quot;Alevel&quot;           &quot;Alife&quot;           
+## [166] &quot;Alimit&quot;           &quot;Alocal&quot;           &quot;Alonger&quot;         
+## [169] &quot;Alow&quot;             &quot;Alower&quot;           &quot;Alymph&quot;          
+## [172] &quot;Amain&quot;            &quot;Amajor&quot;           &quot;Amarker&quot;         
+## [175] &quot;Amastectomi&quot;      &quot;Amay&quot;             &quot;Ambc&quot;            
+## [178] &quot;Amean&quot;            &quot;Ameasur&quot;          &quot;Amedian&quot;         
+## [181] &quot;Ametastas&quot;        &quot;Ametastat&quot;        &quot;Amethod&quot;         
+## [184] &quot;Amethotrex&quot;       &quot;Amgm2&quot;            &quot;Amodel&quot;          
+## [187] &quot;Amonth&quot;           &quot;Amulticent&quot;       &quot;Amultivari&quot;      
+## [190] &quot;Anausea&quot;          &quot;Aneed&quot;            &quot;Anegat&quot;          
+## [193] &quot;Aneoadjuv&quot;        &quot;Aneutropenia&quot;     &quot;Anew&quot;            
+## [196] &quot;Anode&quot;            &quot;Anodeposit&quot;       &quot;Anumber&quot;         
+## [199] &quot;Aobject&quot;          &quot;Aobserv&quot;          &quot;Aobtain&quot;         
+## [202] &quot;Aoccur&quot;           &quot;Aone&quot;             &quot;Aoper&quot;           
+## [205] &quot;Aoral&quot;            &quot;Aoutcom&quot;          &quot;Aoveral&quot;         
+## [208] &quot;Apaclitaxel&quot;      &quot;Apartial&quot;         &quot;Aparticip&quot;       
+## [211] &quot;Apatholog&quot;        &quot;Apatient&quot;         &quot;Aper&quot;            
+## [214] &quot;Aperform&quot;         &quot;Aperiod&quot;          &quot;Aphase&quot;          
+## [217] &quot;Aplacebo&quot;         &quot;Aplus&quot;            &quot;Apoint&quot;          
+## [220] &quot;Apopul&quot;           &quot;Aposit&quot;           &quot;Apossibl&quot;        
+## [223] &quot;Apostmenopaus&quot;    &quot;Apostop&quot;          &quot;Apotenti&quot;        
+## [226] &quot;Apredict&quot;         &quot;Apremenopaus&quot;     &quot;Apresent&quot;        
+## [229] &quot;Apretreat&quot;        &quot;Aprevent&quot;         &quot;Aprevious&quot;       
+## [232] &quot;Aprimari&quot;         &quot;Aprior&quot;           &quot;Aprofil&quot;         
+## [235] &quot;Aprogesteron&quot;     &quot;Aprognost&quot;        &quot;Aprogress&quot;       
+## [238] &quot;Aprogressionfre&quot;  &quot;Aprolong&quot;         &quot;Aproport&quot;        
+## [241] &quot;Aprospect&quot;        &quot;Aprovid&quot;          &quot;Apurpos&quot;         
+## [244] &quot;Aqualiti&quot;         &quot;Aradiotherapi&quot;    &quot;Arandom&quot;         
+## [247] &quot;Arandomis&quot;        &quot;Arang&quot;            &quot;Arate&quot;           
+## [250] &quot;Aratio&quot;           &quot;Areceiv&quot;          &quot;Areceptor&quot;       
+## [253] &quot;Areceptorposit&quot;   &quot;Arecurr&quot;          &quot;Areduc&quot;          
+## [256] &quot;Areduct&quot;          &quot;Aregard&quot;          &quot;Aregimen&quot;        
+## [259] &quot;Aregress&quot;         &quot;Arelaps&quot;          &quot;Arelat&quot;          
+## [262] &quot;Aremain&quot;          &quot;Areport&quot;          &quot;Arequir&quot;         
+## [265] &quot;Arespect&quot;         &quot;Arespond&quot;         &quot;Arespons&quot;        
+## [268] &quot;Aresult&quot;          &quot;Arisk&quot;            &quot;Asafeti&quot;         
+## [271] &quot;Asampl&quot;           &quot;Aschedul&quot;         &quot;Ascore&quot;          
+## [274] &quot;Asecond&quot;          &quot;Asecondari&quot;       &quot;Aseen&quot;           
+## [277] &quot;Aselect&quot;          &quot;Asequenti&quot;        &quot;Aserum&quot;          
+## [280] &quot;Aset&quot;             &quot;Aseven&quot;           &quot;Asever&quot;          
+## [283] &quot;Ashow&quot;            &quot;Ashown&quot;           &quot;Aside&quot;           
+## [286] &quot;Asignific&quot;        &quot;Asimilar&quot;         &quot;Asingl&quot;          
+## [289] &quot;Asite&quot;            &quot;Asix&quot;             &quot;Asize&quot;           
+## [292] &quot;Astabl&quot;           &quot;Astage&quot;           &quot;Astandard&quot;       
+## [295] &quot;Astart&quot;           &quot;Astatist&quot;         &quot;Astatus&quot;         
+## [298] &quot;Astudi&quot;           &quot;Asubgroup&quot;        &quot;Asuggest&quot;        
+## [301] &quot;Asuperior&quot;        &quot;Asupport&quot;         &quot;Asurgeri&quot;        
+## [304] &quot;Asurviv&quot;          &quot;Asystem&quot;          &quot;Atamoxifen&quot;      
+## [307] &quot;Aterm&quot;            &quot;Atest&quot;            &quot;Atherapi&quot;        
+## [310] &quot;Athree&quot;           &quot;Atime&quot;            &quot;Atissu&quot;          
+## [313] &quot;Atoler&quot;           &quot;Atotal&quot;           &quot;Atoxic&quot;          
+## [316] &quot;Atreat&quot;           &quot;Atreatment&quot;       &quot;Atrend&quot;          
+## [319] &quot;Atrial&quot;           &quot;Atumor&quot;           &quot;Atumour&quot;         
+## [322] &quot;Atwo&quot;             &quot;Atype&quot;            &quot;Ause&quot;            
+## [325] &quot;Avalu&quot;            &quot;Aversus&quot;          &quot;Avomit&quot;          
+## [328] &quot;Aweek&quot;            &quot;Awell&quot;            &quot;Awherea&quot;         
+## [331] &quot;Awhether&quot;         &quot;Awithin&quot;          &quot;Awithout&quot;        
+## [334] &quot;Awomen&quot;           &quot;Ayear&quot;
+</code></pre>
+
+<pre><code class="r">
+# Combine the two dataframes
+dtm &lt;- cbind(dtmTitle, dtmAbstract)
+# Add the Vandal variable
+dtm$trial &lt;- trials$trial
+
+# Load CaTools
+library(caTools)
+set.seed(144)
+spl &lt;- sample.split(dtm, SplitRatio = 0.7)
+train &lt;- subset(trials, spl == T)
+test &lt;- subset(trials, spl == F)
+
+# baseline model accuracy on the training set
+table(train$trial)[1]/sum(table(train$trial))
+</code></pre>
+
+<pre><code>##      0 
+## 0.5585
+</code></pre>
+
+<pre><code class="r">
+# CART Model
+library(rpart)
+library(rpart.plot)
+trialsCART &lt;- rpart(trial ~ ., data = train, method = &quot;class&quot;)
+prp(trialsCART)
+</code></pre>
+
+<pre><code>## Warning: abbreviate used with non-ASCII chars
+## Warning: input string 1 is invalid in this locale
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: conversion failure on &#39;title = 2epaocnbprtnetibcp,5bpviarorcs,5aefccwcea5poctoa,9dscw9bsftdobmaporthtipwbc,Aalndifanc,Actotaahpiabc,Acttcealpaiacotb,AcaotprtoasdoppccadFipwsIbc,Acsoiiapipwbmfbolceombp,Acodp(and(ittobc,AcomsrttrtaftpohmroaRTOGrpt,Acotooncrinpbc,Accsotate,Accttcthwyiotpittoabc,Aceobctarsorbt,Afcnavarct,Awbaneftcocniwwbc,Actipadtateoctanp,Amomlwbcttb1atw4acocfbc,Addfqolmiabct,AdolF,AapwoaciowwebciC4acs6,Acaetaoicipp(T1,Actwcda5(wowmafncpUa7f,Acopbcwa(le,AcfbgcwematioahfaqolippIBCSGTV,Acfep(o=ywehbcarao2p,Acfpbcamuqs,ACvCptvoaipnbcptroaECOGs,Aetpzaipwwebc5fotAbds,AiinproaSs,AlvtatcEsfpwweebcsrftB1rt,Atiebcoonpc,Atfnbcaci,Atobcwdc(,Atocvtcimofbifaoa,Atihbc,Admpsopdopibcp(IIIaIwmd,AdrvcsteteoMilteorotsia,AdvcsteteoM(ahafitmord,AsapotboMaM,Aoartaatinpbcprop,ApvopviiiabaeatRftIBCSGrtocatfebc,Ahiovfiwwbc,AotIgihbcawrtac,Aovnbga,A(hiaipbc,ApotIp(ctblapteoatipapnbcp,Amatprotnbc,AacdfBbcabohpciHbcp,Aatsoteoscariesbcacs,AaocipwpomobcRoacrs,AafscsioswalcwtitB1s,Aocarbtdaatcrfebc,Aoo [... truncated]
+## Warning: input string 1 is invalid in this locale
+## Warning: input string 1 is invalid in this locale
+## Warning: input string 1 is invalid in this locale
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-3"/> </p>
+
+<pre><code class="r"># Predict using the test set pred = predict(wikiCART, newdata=test,
+# type=&#39;class&#39;) Accuracy on the test set t1 &lt;- table(test$Vandal, pred)
+# (t1[1,1] + t1[2,2])/(sum(t1)) Plot tree prp(wikiCART)
+</code></pre>
+
+</body>
+
+</html>
+

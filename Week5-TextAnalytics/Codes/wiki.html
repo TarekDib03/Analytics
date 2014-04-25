@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>MITx: 15.071x The Analytics Edge - DETECTING VANDALISM ON WIKIPEDIA</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>MITx: 15.071x The Analytics Edge - DETECTING VANDALISM ON WIKIPEDIA</h1>
+
+<h2><em>Introduction</em></h2>
+
+<p>Wikipedia is a free online encyclopedia that anyone can edit and contribute to. It is available in many languages and is growing all the time. On the English language version of Wikipedia:</p>
+
+<pre><code>There are currently 4.3 million pages.
+There have been a total of 653 million edits (also called revisions) over its lifetime.
+There are approximately 130,000 edits per day.
+</code></pre>
+
+<p>One of the consequences of being editable by anyone is that some people vandalize pages. This can take the form of removing content, adding promotional or inappropriate content, or more subtle shifts that change the meaning of the article. With this many articles and edits per day it is difficult for humans to detect all instances of vandalism and revert them. As a result, Wikipedia uses bots - computer programs that automatically revert edits that look like vandalism. In this assignment we will attempt to develop a vandalism detector that uses machine learning to distinguish between a valid edit and vandalism.</p>
+
+<p>The data for this problem is based on the revision history of the page Language. Wikipedia provides a history for each page that consists of the state of the page at each revision. Rather than manually considering each revision, a script was run that checked whether edits stayed or were reverted. If a change was eventually reverted then that revision is marked as vandalism. This may result in some misclassifications, but the script performs well enough for our needs.</p>
+
+<p>As a result of this preprocessing, some common processing tasks have already been done, including lower-casing and punctuation removal. The columns in the dataset are:</p>
+
+<pre><code>Vandal = 1 if this edit was vandalism, 0 if not.
+Minor = 1 if the user marked this edit as a &quot;minor edit&quot;, 0 if not.
+Loggedin = 1 if the user made this edit while using a Wikipedia account, 0 if they were not.
+Added = The unique words added.
+Removed = The unique words removed.
+</code></pre>
+
+<p>Notice the repeated use of unique. The data we have available is not the bag of words - rather it is the set of words that were removed or added. For example, if a word was removed multiple times in a revision it will only appear one time in the &ldquo;Removed&rdquo; column.</p>
+
+<h2><em>Bag of Words</em></h2>
+
+<pre><code class="r"># Data
+wiki &lt;- read.csv(&quot;wiki.csv&quot;, stringsAsFactors = F)
+
+# Convert Vandal column into facto
+wiki$Vandal = as.factor(wiki$Vandal)
+
+# How many cases of vandalism were detected in the history of this page?
+sum(wiki$Vandal == 1)
+</code></pre>
+
+<pre><code>## [1] 1815
+</code></pre>
+
+<pre><code class="r">
+# Pre process data
+library(tm)
+# Create Corpus
+corpusAdded &lt;- Corpus(VectorSource(wiki$Added))
+# Remove Stop words
+corpusAdded &lt;- tm_map(corpusAdded, removeWords, stopwords(&quot;english&quot;))
+corpusAdded &lt;- tm_map(corpusAdded, stemDocument)
+# Look at the first document
+corpusAdded[[1]]
+</code></pre>
+
+<pre><code>##   repres psycholinguisticspsycholinguist orthographyorthographi help text  action  human ethnologu relationship linguist regard write languag   list xmlspacepreservelanguag metavers formal term philolog common  includ phonologyphonolog often ten list human affili see comput  speechpathologyspeech    way dialect pleas artifici written bodi   quit hypothesi found alon refer   languag profan studi program prioriti rosenfeld technologytechnolog make  first among use languagephilosophi one sound use area creat phrase mark  genet basic famili complet  sapirwhorfhypothesissapirwhorf  talklanguagetalk popul anim  scienc  vocal can concept call   topic locat  number   patholog differ develop 4000 thing idea group complex anim mathemat fair literatur httpwwwzompistcom philosophi  import meaning  historicallinguisticsorphilologyhistor semanticssemant pattern  oral
+</code></pre>
+
+<pre><code class="r"># Create matrix
+dtmAdded = DocumentTermMatrix(corpusAdded)
+dtmAdded
+</code></pre>
+
+<pre><code>## A document-term matrix (3876 documents, 6675 terms)
+## 
+## Non-/sparse entries: 15368/25856932
+## Sparsity           : 100%
+## Maximal term length: 784 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r"># Filter out sparse terms by keeping only terms that appear in 0.3% or more
+# of the revisions
+sparseAdded = removeSparseTerms(dtmAdded, 0.997)
+sparseAdded
+</code></pre>
+
+<pre><code>## A document-term matrix (3876 documents, 166 terms)
+## 
+## Non-/sparse entries: 2681/640735
+## Sparsity           : 100%
+## Maximal term length: 28 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r"># Convert sparseAdded to a data frame called wordsAdded, and then prepend
+# all the words with the letter A
+wordsAdded &lt;- as.data.frame(as.matrix(sparseAdded))
+colnames(wordsAdded) &lt;- paste(&quot;A&quot;, colnames(wordsAdded))
+# Removed Words Process
+corpusRemoved &lt;- Corpus(VectorSource(wiki$Removed))
+corpusRemoved &lt;- tm_map(corpusRemoved, removeWords, stopwords(&quot;english&quot;))
+corpusRemoved &lt;- tm_map(corpusRemoved, stemDocument)
+dtmRemoved = DocumentTermMatrix(corpusRemoved)
+dtmRemoved
+</code></pre>
+
+<pre><code>## A document-term matrix (3876 documents, 5403 terms)
+## 
+## Non-/sparse entries: 13293/20928735
+## Sparsity           : 100%
+## Maximal term length: 784 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r">sparseRemoved = removeSparseTerms(dtmRemoved, 0.997)
+sparseRemoved
+</code></pre>
+
+<pre><code>## A document-term matrix (3876 documents, 162 terms)
+## 
+## Non-/sparse entries: 2552/625360
+## Sparsity           : 100%
+## Maximal term length: 28 
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<pre><code class="r">wordsRemoved &lt;- as.data.frame(as.matrix(sparseRemoved))
+colnames(wordsRemoved) &lt;- paste(&quot;R&quot;, colnames(wordsRemoved))
+
+# Combine the two dataframes
+wikiWords = cbind(wordsAdded, wordsRemoved)
+# Add the Vandal variable
+wikiWords$Vandal &lt;- wiki$Vandal
+
+# Load CaTools
+library(caTools)
+set.seed(123)
+spl &lt;- sample.split(wikiWords$Vandal, 0.7)
+train &lt;- subset(wikiWords, spl == T)
+test &lt;- subset(wikiWords, spl == F)
+# baseline model accuracy on the test set
+table(test$Vandal)[1]/sum(table(test$Vandal))
+</code></pre>
+
+<pre><code>##      0 
+## 0.5314
+</code></pre>
+
+<pre><code class="r">
+# CART Model
+library(rpart)
+library(rpart.plot)
+wikiCART &lt;- rpart(Vandal ~ ., data = train, method = &quot;class&quot;)
+# Predict using the test set
+pred = predict(wikiCART, newdata = test, type = &quot;class&quot;)
+# Accuracy on the test set
+t1 &lt;- table(test$Vandal, pred)
+(t1[1, 1] + t1[2, 2])/(sum(t1))
+</code></pre>
+
+<pre><code>## [1] 0.5417
+</code></pre>
+
+<pre><code class="r"># Plot tree
+prp(wikiCART)
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAYAAACmKP9/AAAACXBIWXMAAAsSAAALEgHS3X78AAAfZ0lEQVR4nO3df5RV1WEv8O+AowRRAZURRTCIiQZNig2K4g8MtAYU4lLCGI1EnyjVYtToW7E+JL5ItcZfNTU8FX8lJoqvhMgDTeoPjIiiwBK6jIoVi4rVSlBU0IgwnPfHLTTjDD/EgTMDn89aLNbcu8++33v2rNl333P23gkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwKarKDgBsnKIoirIzbCuqqqr8baTFa1V2AACg6engAWArpIMHgK2QDh5asOXLl6eqqqrev1atWqVnz56ZNWtWo8dUVVVl6NChSZI5c+akqqoqY8eO3ZKxm9SDDz6Ygw46KB07dkxtbW0++OCDRssdccQR9c7TPvvss2WDwha2XdkBgM+vpqYmJ5xwQoqiyEsvvZTHH388o0aNWmcnv7V4/fXXM2TIkBx44IEZMWJEbrjhhtTV1WXixIkNys6fPz8DBgzIvvvumyTZddddt3RcAFqILyX5hyS3NOG/f0ryrcZerGjEsmXLiiRF37591z5WV1dX1NTUFO3atWtQvmfPnkWSIklx5plnFrNnzy6SFKNGjSr69etX7LTTTsWpp55arFy5siiKonjiiSeKPn36FDvuuGPx5S9/uRg/fnyxevXqYsqUKUWS4s477yyKoijmzp1bJCmuuOKKYvXq1cWPf/zjYs899yzatm1bHHnkkcW8efOKoiiK1atXF5dddlnRuXPnok2bNkXv3r2LWbNmNfbWGrV69ep6P1999dVFkmL69OlFURTF4MGDi+rq6uLDDz+sV27JkiVFkuKpp54qli5d2qCeT1tHe/dMck0Tt/dPk3xzI3/f4DMxgodN0+6QQw556Sc/+Un23nvvJqv0ww8/zJVXXjlqwoQJQ5JM+azHF0WR+fPn5913380RRxzR4PmJEyfmgAMOSP/+/TNmzJgsXrw4SXLLLbfkxBNPzO67755f/epXGTJkSPr27Ztjjz027dq1y/nnn5/f/va3Oeuss7LHHnusN8Ojjz6aMWPG5Jvf/GYOO+yw3Hjjjamtrc38+fPzwAMP5IorrsiAAQNyyCGH5B//8R9z3nnn5emnn15nfStXrsyDDz6Y2267LcOHD8+3v/3ttc8tWrQoSda2wd57752VK1dm8eLF9b6Cf+mll5Ikw4cPz4IFC9K1a9fcc8896du378ad2GTXQw899A/XXXddOnfuvLHHbNCyZcty+eWXn3f//fd/I8ljTVYxRAcPm6pnv379cvTRRzd5xRdffHEmTJjQL5+hg3/yySfz51O3991339x1110Nyu2///5Jkvbt26dr165rO/jvfOc7+fnPf55p06alf//+WbBgQd5666189NFHuffeezNkyJCcf/752XPPPXPnnXfmjDPOWGeWDz/8MEnSunXrfP3rX8/EiRPz9ttvp66uLl26dMn48eNzzDHH5OWXX86tt96aV199tdF6FixYkDvuuCN33nlnli5dmm9961vp1atXvTLvvfdekqRDhw5Jkk6dOiVJ3n///Xrl3njjjdTU1GTIkCE54IADcvHFF+eUU07Jv//7v6d169brfC9/ptfxxx//WT4QbLTvf//7uf/++4+ODp4m5iY72DStt9tu83w+/q96N6rXWaOmpiYjR47MWWedlQMPPDCvvPJKHnrooY0+fr/99kuSdOzYMUmyevXqvPHGG0mSr371q0kqnWdNTc3aUfO6HHvssbnooovyxBNP5LjjjsugQYPy3HPPpXXr1tl1113zi1/8Il/60pdywQUXrLOOG2+8Mfvtt18ee+yx/OhHP8pbb72V++67Lz169KhXbpdddkmStR9U3nnnnST/3eGvMWzYsPznf/5nrrvuuowYMSLDhg3L66+/noULF27U+UnSeiM/CHxm/9Xe/hbT5PxSwVagR48eufnmm3Prrbdm8uTJSZJnnnlmneXXfZn5v3Xp0iVJ8txzzyWpdKJvv/12unTpsvbbgiVLliRJXnnllbXHzZ8/P/369ctbb72Vhx56KL169cqVV16ZV155Jddee22eeOKJzJw5My+++GLatWvX6Gt/9NFHad26dfbYY4906tQpbdu2bbRc165dk2TttwALFy5MdXX12pH8GrfccktOPvnktR8A1oz8d9pppw2eB2ipdPDQhIYOHZp//dd/TZL8/d//fX75y19myZIlqa2tzVFHHZU+ffpk4cKFefrpp9OvX7984xvfyA9+8IMmzbBmFP722283+nx1dXXmzZuXGTNmbPC9tG3bNmeffXYuv/zyHHfccamrq8sZZ5yR7t27J0muvfbajBgxIueee+7a4x5++OEMHjw43/ve9zJ37ty89957qa6uzi677JJVq1YlScaNG5ehQ4fm1VdfbfTDxiWXXJIZM2akY8eOGT58eDp37pxzzjknr732WoOM1dXVOeecczJ8+PBMnTo1Q4cOTZs2bTJnzpz06NEjY8eOTZs2bXLfffdl0KBBOf300zNp0qQcffTRqamp2fgTuwF33XVXBg8enJNOOim9evXKnDlz8sc//jEnn3xy+vfvn0MPPXSD335AU9LBQxPq3r17Xn/99bzxxhuZPn16Tj311Jx99tmpra3N9OnT893vfjd33HFHRo8eneuvvz6PPvro2lFoU2nfvn1qamoyZ86cLF++vMHzI0eOzJtvvplJkyatt5699torv/vd79K1a9dcc801WbZsWcaPH5/jjz8+BxxwQEaPHp2PP/4406ZNy6hRo9Yed/755+e8887LjBkzctlll6Uoitx7773ZbbfdctFFF6V3796ZNGlStt9++wwcODCLFy/OCy+8UO+1q6qq0qdPn9x+++158803c9VVV2X27NmZOXNmvXLdu3fP5MmT065du0yZMiW1tbUZN25ckuTjjz/OK6+8kiVLluS0007LmDFjsmjRokyePDknnnhiJkyYsKmnuFGzZs3K1772tfz617/O2Wefnccffzzf+973cuGFF+bRRx9NbW1t7r777iZ9TQCa3uGXXnppg+lV48aNK2666abitNNOK5599tni/fffLzp06FDU1tYWtbW1xcCBA4vbbrutePjhh4vjjjuuGDhwYPHYY4/V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" alt="plot of chunk unnamed-chunk-1"/> </p>
+
+<h2><em>PROBLEM-SPECIFIC KNOWLEDGE</em></h2>
+
+<p>We weren&#39;t able to improve on the baseline using the raw textual information. More specifically, the words themselves were not useful. There are other options though, and in this section we will try two techniques - identifying a key class of words, and counting words.</p>
+
+<p>The key class of words we will use are website addresses. &ldquo;Website addresses&rdquo; (also known as URLs - Uniform Resource Locators) are comprised of two main parts. An example would be &ldquo;<a href="http://www.google.com">http://www.google.com</a>&rdquo;. The first part is the protocol, which is usually &ldquo;http&rdquo; (HyperText Transfer Protocol). The second part is the address of the site, e.g. &ldquo;<a href="http://www.google.com">www.google.com</a>&rdquo;. We have stripped all punctuation so links to websites appear in the data as one word, e.g. &ldquo;httpwwwgooglecom&rdquo;. We hypothesize that given that a lot of vandalism seems to be adding links to promotional or irrelevant websites, the presence of address is a sign of vandalism.</p>
+
+<p>We can search for the presence of a web address in the words added by searching for &ldquo;http&rdquo; in the Added column.</p>
+
+<pre><code class="r"># Create a copy of the data frame wiki
+wikiWords2 &lt;- wikiWords
+
+# Make a new column in wikiWords2 that is 1 if &#39;http&#39; was in Added
+wikiWords2$HTTP = ifelse(grepl(&quot;http&quot;, wiki$Added, fixed = TRUE), 1, 0)
+
+# how many revisions added a link?
+sum(wikiWords2$HTTP)
+</code></pre>
+
+<pre><code>## [1] 217
+</code></pre>
+
+<pre><code class="r">
+# Training and test data sets
+wikiTrain2 = subset(wikiWords2, spl == TRUE)
+wikiTest2 = subset(wikiWords2, spl == FALSE)
+
+# Build a CART model
+wikiCART2 &lt;- rpart(Vandal ~ ., data = wikiTrain2, method = &quot;class&quot;)
+
+# Accuracy
+pred2 &lt;- predict(wikiCART2, newdata = wikiTest2, type = &quot;class&quot;)
+t2 &lt;- table(wikiTest2$Vandal, pred2)
+(t2[1, 1] + t2[2, 2])/sum(t2)
+</code></pre>
+
+<pre><code>## [1] 0.5727
+</code></pre>
+
+<pre><code class="r">
+# Sum the rows of dtmAdded and dtmRemoved and add them as new variables in
+# data frame wikiWords2
+wikiWords2$NumWordsAdded = rowSums(as.matrix(dtmAdded))
+wikiWords2$NumWordsRemoved = rowSums(as.matrix(dtmRemoved))
+# Average number of words added
+mean(wikiWords2$NumWordsAdded)
+</code></pre>
+
+<pre><code>## [1] 4.05
+</code></pre>
+
+<pre><code class="r">
+# Build a CART model
+wikiTrain3 = subset(wikiWords2, spl == TRUE)
+wikiTest3 = subset(wikiWords2, spl == FALSE)
+wikiCART3 &lt;- rpart(Vandal ~ ., data = wikiTrain3, method = &quot;class&quot;)
+pred3 &lt;- predict(wikiCART3, newdata = wikiTest3, type = &quot;class&quot;)
+t3 &lt;- table(wikiTest3$Vandal, pred3)
+(t3[1, 1] + t3[2, 2])/sum(t3)
+</code></pre>
+
+<pre><code>## [1] 0.6552
+</code></pre>
+
+<h2><em>USING NON-TEXTUAL DATA</em></h2>
+
+</body>
+
+</html>
+

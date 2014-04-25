@@ -1,0 +1,94 @@
+MITx: 15.071x The Analytics Edge
+------------------------------------------------------------------
+# Predicting parole violators
+#### Tarek Dib
+#### Date: March 24, 2014
+
+### *Introduction*
+
+In many criminal justice systems around the world, inmates deemed not to be a threat to society are released from prison under the parole system prior to completing their sentence. They are still considered to be serving their sentence while on parole, and they can be returned to prison if they violate the terms of their parole.
+
+Parole boards are charged with identifying which inmates are good candidates for release on parole. They seek to release inmates who will not commit additional crimes after release. In this problem, we will build and validate a model that predicts if an inmate will violate the terms of his or her parole. Such a model could be useful to a parole board when deciding to approve or deny an application for parole.
+
+For this prediction task, we will use data from the United States 2004 National Corrections Reporting Program, a nationwide census of parole releases that occurred during 2004. We limited our focus to parolees who served no more than 6 months in prison and whose maximum sentence for all charges did not exceed 18 months. The dataset contains all such parolees who either successfully completed the term of parole during 2004 or those who violated the terms of their parole during that year. The dataset contains the following variables:
+
+    male: 1 if the parolee is male, 0 if female
+    race: 1 if the parolee is white, 2 otherwise
+    age: the parolee's age in years at release from prison
+    state: a code for the parolee's state. 2 is Kentucky, 3 is Louisiana, 4 is Virginia, and 1 is any other state. The three states were selected due to having a high representation in the dataset.
+    time.served: the number of months the parolee served in prison (limited by the inclusion criteria to not exceed 6 months).
+    max.sentence: the maximum sentence length for all charges, in months (limited by the inclusion criteria to not exceed 18 months).
+    multiple.offenses: 1 if the parolee was incarcerated for multiple offenses, 0 otherwise.
+    crime: a code for the parolee's main crime leading to incarceration. 2 is larceny, 3 is drug-related crime, 4 is driving-related crime, and 1 is any other crime.
+    violator: 1 if the parolee violated the parole, and 0 if the parolee completed the parole without violation.
+
+## *Loading and Preparing the Dataset*
+```{r}
+# Read the data set
+parole <- read.csv("parole.csv")
+
+# Structure and summary
+str(parole)
+summary(parole)
+
+# Number of violators
+table(parole$violator)[2]
+
+# Convert to factors
+parole$state = as.factor(parole$state)
+parole$crime = as.factor(parole$crime)
+```
+
+## *Training and Testing Datasets*
+```{r}
+# Splitting the data sets into training and test sets
+set.seed(144)
+library(caTools)
+split = sample.split(parole$violator, SplitRatio = 0.7)
+train = subset(parole, split == TRUE)
+test = subset(parole, split == FALSE)
+```
+
+## *Building the Logistic Regression Model*
+```{r}
+mod <- glm(violator ~ ., data=train, family="binomial")
+summary(mod)
+
+# Significant predictors
+id <- which(summary(mod)$coeff[,4] < 0.05)
+# Cofficients of the significant predictors
+coeff.sig <- summary(mod)$coeff[,1][id]
+
+# A parolee who is male, of white race, aged 50 years at prison release, from the state of Maryland, served 3 months, had a maximum sentence of 12 months, did not commit multiple offenses, and committed a larceny. Obtain odds and probability that he is a violator. From the logistic regression equation, we have log(odds) = -4.2411574 + 0.3869904*male + 0.8867192*race - 0.0001756*age + 0.4433007*state2 + 0.8349797*state3 - 3.3967878*state4 - 0.1238867*time.served + 0.0802954*max.sentence + 1.6119919*multiple.offenses + 0.6837143*crime2 - 0.2781054*crime3 - 0.0117627*crime4. This parolee has male=1, race=1, age=50, state2=0, state3=0, state4=0, time.served=3, max.sentence=12, multiple.offenses=0, crime2=1, crime3=0, crime4=0. We conclude that log(odds) = -1.700629.
+odds <- as.numeric(exp(coefficients(mod)[c("(Intercept)")]+coefficients(mod)[c("male")]+coefficients(mod)[c("race")] + coefficients(mod)[c("time.served")]*3 + coefficients(mod)[c("max.sentence")]*12 + coefficients(mod)[c("multiple.offenses")]*0 + coefficients(mod)[c("crime2")]))
+p = odds/(1+odds)
+```
+
+## *Evaluating the Model on the Testing Set*
+```{r}
+# Predict the probability of violation for the test set
+testPred <- predict(mod, newdata=test, type="response")
+
+# Confusion Matrix
+table(test$violator, testPred > 0.5)
+# Sensitivity, Specificity and Accuracy
+12/23; 167/179; 179/202
+
+# Baseline model
+table(test$violator)
+# Accuracy: there are 179 negative examples, which are the ones that the baseline model would get correct.
+179/202
+
+# Load ROCR library.  The AUC deals with differentiating between a randomly selected positive and negative example. It is independent of the regression cutoff selected. 
+library(ROCR)
+ROCRpred <- prediction(testPred, test$violator)
+as.numeric(performance(ROCRpred, "auc")@y.values)
+```
+If the board used the model for parole decisions, a negative prediction would lead to a prisoner being granted parole, while a positive prediction would lead to a prisoner being denied parole. The parole board would experience more regret for releasing a prisoner who then violates parole (a negative prediction that is actually positive, or false negative) than it would experience for denying parole to a prisoner who would not have violated parole (a positive prediction that is actually negative, or false positive).
+
+Decreasing the cutoff leads to more positive predictions, which increases false positives and decreases false negatives. Meanwhile, increasing the cutoff leads to more negative predictions, which increases false negatives and decreases false positives. The parole board assigns high cost to false negatives, and therefore should decrease the cutoff. 
+
+## *Identifying Bias in Observational Data*
+While expanding the dataset to include the missing parolees and labeling each as violator=0 would improve the representation of non-violators, it does not capture the true outcome, since the parolee might become a violator after 2004. Though labeling these new examples with violator=NA correctly identifies that we don't know their true outcome, we cannot train or test a prediction model with a missing dependent variable.
+
+As a result, a prospective dataset that tracks a cohort of parolees and observes the true outcome of each is more desirable. Unfortunately, such datasets are often more challenging to obtain (for instance, if a parolee had a 10-year term, it might require tracking that individual for 10 years before building the model). Such a prospective analysis would not be possible using the 2004 National Corrections Reporting Program dataset. 

@@ -1,0 +1,83 @@
+MITx: 15.071x The Analytics Edge - DOCUMENT CLUSTERING WITH DAILY KOS
+========================================================
+# Name: Tarek Dib
+# Date: 04/21/2014
+
+## *Introduction*
+Document clustering, or text clustering, is a very popular application of clustering algorithms. A web search engine, like Google, often returns thousands of results for a simple query. For example, if you type the search term "jaguar" into Google, 406 million results are returned. This makes it very difficult to browse or find relevant information, especially if the search term has multiple meanings. If we search for "jaguar", we might be looking for information about the animal, the car, or the Jacksonville Jaguars football team. 
+
+Clustering methods can be used to automatically group search results into categories, making it easier to find relavent results. This method is used in the search engines PolyMeta and Helioid, as well as on FirstGov.gov, the official Web portal for the U.S. government. The two most common algorithms used for document clustering are Hierarchical and k-means. 
+
+In this problem, we'll be clustering articles published on Daily Kos, an American political blog that publishes news and opinion articles written from a progressive point of view. Daily Kos was founded by Markos Moulitsas in 2002, and as of 2010, the site had an average weekday traffic of hundreds of thousands of visits. 
+
+The file dailykos.csv contains data on 3,430 news articles or blogs that have been posted on Daily Kos. These articles were posted in 2004, leading up to the United States Presidential Election. The leading candidates were incumbent President George W. Bush (republican) and John Kerry (democratic). Foreign policy was a dominant topic of the election, specifically, the 2003 invasion of Iraq. 
+
+The variable "Document" gives an identifying number to each document. Each of the other variables in the dataset is a word that has appeared in at least 50 different articles (1,545 words in total). The set of  words has been trimmed according to the techniques covered in the previous week on text analytics (punctuation has been removed, stop words have been removed, and the words have been stemmed). For each document, the variable values are the number of times that word appeared in the document.
+
+
+
+## *HIERARCHICAL CLUSTERING*
+```{r}
+# Data
+setwd("/home/tarek/Analytics/Weeks/Week6-Clustering/Data")
+dailyKos <- read.csv("dailykos.csv")
+str(dailyKos)
+
+kosDist = dist(dailyKos[2:ncol(dailyKos)], method = "euclidean")
+kosHierClust = hclust(kosDist, method="ward") 
+
+# Plot the dendrogram. The choices 2 and 3 are good cluster choices according to the dendrogram, because there is a lot of space between the horizontal lines in the dendrogram in those cut off spots.
+plot(kosHierClust)
+
+# Pick 7 clusters
+clusterGroups = cutree(kosHierClust, k = 7)
+HierCluster = split(dailyKos, clusterGroups)
+
+nrow(HierCluster[[1]]); nrow(HierCluster[[2]]); nrow(HierCluster[[3]]); nrow(HierCluster[[4]]); nrow(HierCluster[[5]]); nrow(HierCluster[[6]]); nrow(HierCluster[[7]])
+
+cluster1 <- subset(dailyKos, clusterGroups==1)
+cluster2 <- subset(dailyKos, clusterGroups==2)
+cluster3 <- subset(dailyKos, clusterGroups==3)
+cluster4 <- subset(dailyKos, clusterGroups==4)
+cluster5 <- subset(dailyKos, clusterGroups==5)
+cluster6 <- subset(dailyKos, clusterGroups==6)
+cluster7 <- subset(dailyKos, clusterGroups==7)
+nrow(cluster1); nrow(cluster2); nrow(cluster3); nrow(cluster4); nrow(cluster5);nrow(cluster6); nrow(cluster7)
+
+# Compute the mean frequency values of each of the words in cluster 1, and then output the word that occur the most frequently
+tail(sort(colMeans(cluster1[-1])),1)
+tail(sort(colMeans(cluster2[-1])))
+tail(sort(colMeans(cluster3[-1])))
+tail(sort(colMeans(cluster4[-1])))
+tail(sort(colMeans(cluster5[-1])))
+tail(sort(colMeans(cluster6[-1])))
+tail(sort(colMeans(cluster7[-1])))
+```
+
+## *K-MEANS CLUSTERING*
+```{r}
+set.seed(1000)
+k = 7
+KmeansCluster <- kmeans(dailyKos[-1], centers = k)
+dailyKosClusters <- KmeansCluster$cluster
+sum(dailyKosClusters==7)
+table(KmeansCluster$cluster)
+
+KmeansCluster1 = subset(dailyKos, KmeansCluster$cluster == 1)
+KmeansCluster2 = subset(dailyKos, KmeansCluster$cluster == 2)
+KmeansCluster3 = subset(dailyKos, KmeansCluster$cluster == 3)
+KmeansCluster4 = subset(dailyKos, KmeansCluster$cluster == 4)
+KmeansCluster5 = subset(dailyKos, KmeansCluster$cluster == 5)
+KmeansCluster6 = subset(dailyKos, KmeansCluster$cluster == 6)
+KmeansCluster7 = subset(dailyKos, KmeansCluster$cluster == 7)
+
+tail(sort(colMeans(KmeansCluster1[-1])))
+tail(sort(colMeans(KmeansCluster2[-1])))
+tail(sort(colMeans(KmeansCluster3[-1])))
+tail(sort(colMeans(KmeansCluster4[-1])))
+tail(sort(colMeans(KmeansCluster5[-1])))
+tail(sort(colMeans(KmeansCluster6[-1])))
+tail(sort(colMeans(KmeansCluster7[-1])))
+
+# Which Hierarchical Cluster best corresponds to K-Means Cluster 2? 116/144. K-Means Cluster 3: 171/(171+42+64). K-Means Cluster 7: No hierarchical cluster contains at least of the points in K-means cluster 7. K-Means Cluster 6: 2.
+table(clusterGroups, KmeansCluster$cluster)

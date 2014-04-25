@@ -1,0 +1,113 @@
+MITx: 15.071x The Analytics Edge
+------------------------------------------------------------------
+# Popularity of Music Records
+#### Tarek Dib
+#### Date: March 23, 2014
+
+### *Introduction*
+The music industry has a well-developed market with a global revenue valued at $16.5 billion in 2012. The recording industry is highly competitive and is dominated by three big production companies which make up nearly 82% of the total annual album sales.
+
+Artists are at the core of the music industry and record labels provide them with the necessary resources to sell their music on a large scale. A record label incurs numerous costs (studio recording, marketing, distribution, and touring) in exchange for a percentage of the profits from album sales, singles and concert tickets.
+
+Unfortunately, the success of an artist's release is highly uncertain: a single may be extremely popular, resulting in widespread radio play and digital downloads, while another single may turn out quite unpopular, and therefore unprofitable.
+
+Knowing the competitive nature of the recording industry, record labels face the fundamental decision problem of which musical releases to support to maximize their financial success.
+
+Analytics is used to predict whether a song will reach a spot in the Top 10 of the Billboard Hot 100 Chart. The dataset consists of all songs which made it to the Top 10 of the Billboard Hot 100 Chart from 1990-2010 plus a sample of additional songs that didn't make the Top 10. This data comes from three sources: Wikipedia, Billboard.com, and EchoNest.
+
+The variables included in the dataset either describe the artist or the song, or they are associated with the following song attributes: time signature, loudness, key, pitch, tempo, and timbre.
+
+Here's a detailed description of the variables:
+
+    year = the year the song was released
+    songtitle = the title of the song
+    artistname = the name of the artist of the song
+    songID and artistID = identifying variables for the song and artist
+    timesignature and timesignature_confidence = a variable estimating the time signature of the song, and the confidence in the estimate
+    loudness = a continuous variable indicating the average amplitude of the audio in decibels
+    tempo and tempo_confidence = a variable indicating the estimated beats per minute of the song, and the confidence in the estimate
+    key and key_confidence = a variable with twelve levels indicating the estimated key of the song (C, C#, . . ., B), and the confidence in the estimate
+    energy = a variable that represents the overall acoustic energy of the song, using a mix of features such as loudness
+    pitch = a continuous variable that indicates the pitch of the song
+    timbre_0_min, timbre_0_max, timbre_1_min, timbre_1_max, . . . , timbre_11_min, and timbre_11_max = variables that indicate the minimum/maximum values over all segments for each of the twelve values in the timbre vector (resulting in 24 continuous variables)
+    Top10 = a binary variable indicating whether or not the song made it to the Top 10 of the Billboard Hot 100 Chart (1 if it was in the top 10, and 0 if it was not)
+
+## *Understanding the Data*
+```{r}
+# Read the data
+songs <- read.csv("songs.csv")
+
+# Subset of the data set (year=2010)
+songs.2010 = subset(songs, year==2010)
+# Songs in 2010
+nrow(songs.2010)
+
+# Number of songs with artist name is Michael Jackson
+MichaelJackson = subset(songs, artistname == "Michael Jackson")
+nrow(MichaelJackson)
+
+# Songs made to top10 by Michael Jackson
+MichaelJackson.10 = subset(songs, artistname == "Michael Jackson" & Top10==1)
+levels(factor(MichaelJackson.10$songtitle))
+
+# timesignature variable
+table(songs$timesignature)
+
+# Song with highest tempo
+levels(factor(songs$songtitle[which.max(songs$tempo)]))
+```
+
+## *Prediction Model and Multicollinearity*
+```{r}
+# Split the data into training and test sets
+SongsTrain <- subset(songs, year <= 2009)
+SongsTest <- subset(songs, year == 2010)
+
+# define a vector of variables that we won't use in our model.
+nonvars = c("year", "songtitle", "artistname", "songID", "artistID")
+# Remove these variables from the training and test sets
+SongsTrain = SongsTrain[,!(names(SongsTrain) %in% nonvars)]
+SongsTest = SongsTest[,!(names(SongsTest) %in% nonvars)]
+
+# Build the model
+Model1 <- glm(Top10 ~., data = SongsTrain, family="binomial")
+summary(Model1)
+
+# Correlation between loudness and energy
+cor(songs$loudness, songs$energy)    # loudness and energy are highly correlated
+
+# Create a model without the variable loudness
+Model2 = glm(Top10 ~ . -loudness, data=SongsTrain, family=binomial)
+summary(Model2)
+
+# Create a model without the variable energy
+Model3 = glm(Top10 ~ . -energy, data=SongsTrain, family=binomial)
+summary(Model3)
+```
+
+## *Validating Our Model*
+```{r}
+# Make predictions on the test set
+predictTest <- predict(Model3, newdata=SongsTest, type="response")
+# Confusion Matrix with threshold of 0.45
+confMat <- table(SongsTest$Top10, predictTest >= 0.45)
+# Accuracy
+(confMat[1,1] + confMat[2,2])/sum(confMat)
+
+# Baseline model. Pick the most frequent outcome (a song is not a Top 10 hit) for all songs
+baseline <- table(SongsTest$Top10)
+# Accuracy
+baseline[1]/(baseline[1]+baseline[2])
+```
+It seems that Model 3 gives us a small improvement over the baseline model. Let's view the two models from an investment perspective. A production company is interested in investing in songs that are highly likely to make it to the Top 10. The company's objective is to minimize its risk of financial losses attributed to investing in songs that end up unpopular.
+
+A competitive edge can therefore be achieved if we can provide the production company a list of songs that are highly likely to end up in the Top 10. We note that the baseline model does not prove useful, as it simply does not label any song as a hit. Let us see what our model has to offer. 
+
+## *Sensitivity and Specificity*
+```{r}
+# Sensitivity and Specificity
+confMat[2,2]/as.numeric(rowSums(confMat)[2])
+confMat[1,1]/as.numeric(rowSums(confMat)[1])
+```
+Model 3 has a very high specificity, meaning that it favors specificity over sensitivity. While Model 3 only captures less than half of the Top 10 songs, it still can offer a competitive edge, since it is very conservative in its predictions.
+

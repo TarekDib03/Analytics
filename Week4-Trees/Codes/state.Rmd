@@ -1,0 +1,89 @@
+MITx: 15.071x The Analytics Edge - The Steven's Supreme Court Decision
+========================================================
+# Classification and Regression Tree (CART)
+### Tarek Dib
+### April 6, 2014
+
+### *Itroduction*
+State data set. Data for the 50 states. The set has the population, per capita income, illiteracy rate, murder rate, high school graduation rate, average number of frost days, area, latitude and longitude, division the state belongs to, region the state belongs to, and two-letter abbreviation. This dataset comes from the U.S. Department of Commerce, Bureau of the Census.
+
+We will try to build a model for life expectancy using regression trees, and employ cross-validation to improve our tree's performance.
+
+### *Linear Regression Models* 
+```{r}
+# Load the dataset into R and convert it to a data frame 
+data(state)
+statedata = data.frame(state.x77)
+str(statedata)     
+# Build the model 
+lin.Reg <- lm(Life.Exp ~ ., data=statedata)
+summary(lin.Reg)
+# Predict
+pred1 <- predict(lin.Reg)
+# Sum of Square Error
+sum((pred1-statedata$Life.Exp)^2)
+# Linear regression model only with Population, Murder, Frost, and HS.Grad as predictors
+lin.Reg2 <- lm(Life.Exp ~ Population + Murder + Frost + HS.Grad, data=statedata)
+summary(lin.Reg2)
+# Predict
+pred2 <- predict(lin.Reg2)
+# Sum of Squared Error
+sum((pred2 - statedata$Life.Exp)^2)
+
+# Correlation matrix
+cor(statedata)
+```
+
+# *CART Models*
+```{r}
+# Build a regression tree model
+library(rpart)
+library(rpart.plot)
+# In this problem we are not as interested in predicting life expectancies for new observations as we are understanding how they relate to the other variables we have, so we'll use all of the data to build our model.
+CART1 <- rpart(Life.Exp ~ ., data=statedata)
+prp(CART1)
+# Predict life expectancy of the CART model
+pred3 <- predict(CART1)
+# Sum of Squares Error
+sum((statedata$Life.Exp - pred3)^2)
+# The error is higher than for the linear regression models. One reason might be that we haven't made the tree big enough. Set the minbucket parameter to 5, and recreate the tree.
+CART2 <- rpart(Life.Exp ~ ., data=statedata, minbucket=5)
+prp(CART2)
+# SSE
+pred4 <- predict(CART2)
+sum((statedata$Life.Exp - pred4)^2)
+
+# Area is the only predictor. minbucket=1
+CART3 <- rpart(Life.Exp ~ Area, data=statedata, minbucket=1)
+prp(CART3)
+# SSE. Note that the SSE is not zero here - we still make some mistakes. This is because there are other parameters in rpart that are also trying to prevent the tree from overfitting by setting default values. So our tree doesn't necessarily have one observation in each bucket - by setting minbucket=1 we are just allowing the tree to have one observation in each bucket. 
+pred5 <- predict(CART3)
+sum((statedata$Life.Exp - pred5)^2)
+```
+
+# *Cross Validation*
+Adjusting the variables included in a linear regression model is a form of model tuning. As shown above, it is clear that by removing variables in our linear regression model (tuning the model), we were able to maintain the fit of the model while using a simpler model. A rule of thumb is that simpler models are more interpretable and generalizeable. We will now tune our regression tree to see if we can improve the fit of our tree while keeping it as simple as possible. The purpose of cross-validation is to pick the tree that will perform the best on a test set. So we would expect the model we will make with the "best" cp to perform best on a test set.
+```{r}
+library(caret)
+library(e1071)
+set.seed(111)
+
+# Define cross-validation experiment
+fitControl = trainControl( method = "cv", number = 10 )
+cartGrid = expand.grid(.cp = seq(0.01, 0.5, 0.01))
+tr <- train(Life.Exp ~ ., data = statedata, method = "rpart", trControl = fitControl, tuneGrid = cartGrid)
+# Build CART model with cp=0.11
+CART4 = rpart(Life.Exp ~ ., data=statedata, cp=0.11)
+prp(CART4)
+# SSE
+pred6 <- predict(CART4)
+sum((pred6 - statedata$Life.Exp)^2)
+
+# Use only Area as the predictor
+set.seed(111)
+tr1 <- train(Life.Exp ~ Area, data = statedata, method = "rpart", trControl = fitControl, tuneGrid = cartGrid)
+CART5 = rpart(Life.Exp ~ Area, data=statedata, cp=0.01)
+prp(CART5)
+# SSE
+pred7 <- predict(CART5)
+sum((pred7 - statedata$Life.Exp)^2)

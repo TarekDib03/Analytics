@@ -1,0 +1,264 @@
+\documentclass[11pt, a4paper]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{amsfonts, amsmath, hanging, hyperref, natbib, parskip, times}
+\hypersetup{
+ colorlinks,
+ linkcolor=blue,
+ urlcolor=blue
+}
+
+\setlength{\topmargin}{-15mm}
+\setlength{\oddsidemargin}{-2mm}
+\setlength{\textwidth}{170mm}
+\setlength{\textheight}{250mm}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\usepackage{listings}
+\usepackage{float}
+\usepackage[english]{babel}
+\usepackage{setspace}
+\usepackage{mdframed}
+
+\title{MITx: 15.071x The Analytics Edge - Regression Trees for Housing Data in Boston}
+\author{Tarek Dib}
+
+\date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+A paper was written on the relationship between house prices and clean air in the late 1970s by David Harrison of Harvard and Daniel Rubinfeld of U. of Michigan. “Hedonic Housing Prices and the Demand for Clean Air” has been citedmore than 1000 times. Data set was widely used to evaluate algorithms. In this report, we will explore the dataset with the aid of trees, compare linear regression with regression trees, discuss what the “cp” parameter means and apply cross-validation to regression trees.
+
+\section{Understanding Data}
+Each entry corresponds to a census tract, a statistical division of the area that is used by researchers to break down towns and cities. There will be multiple census tracts per Town. There are 14 variables in the data set defined as listed below.
+\\
+\begin{enumerate}
+\item LON and LAT are the longitude and latitude of the center of the census tract.
+\item MEDV is the median value of owner-occupied homes, in thousands of dollars.
+\item CRIM is the per capita crime rate
+\item ZN is related to how much of the land is zoned for large residential properties
+\item INDUS is proportion of area used for industry
+\item CHAS is 1 if the census tract is next to the Charles River
+\item NOX is the concentration of nitrous oxides in the air
+\item RM is the average number of rooms per dwelling
+\item AGE is the proportion of owner-occupied units built before 1940
+\item DIS is a measure of how far the tract is from centers of employment in Boston
+\item RAD is a measure of closeness to important highways
+\item TAX is the property tax rate per \$10,000 of value
+\item PTRATIO is the pupil-teacher ratio by town
+\end{enumerate}
+
+\section{Exploratory Data Analysis}
+1. Summary Statistics
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+boston = \hlkwd{read.csv}(\hlstr{"boston.csv"})
+\hlkwd{str}(boston)
+\end{alltt}
+\begin{verbatim}
+## 'data.frame':	506 obs. of  16 variables:
+##  $ TOWN   : Factor w/ 92 levels "Arlington","Ashland",..: 54 77 77 46 46 46 69 69 69 69 ...
+##  $ TRACT  : int  2011 2021 2022 2031 2032 2033 2041 2042 2043 2044 ...
+##  $ LON    : num  -71 -71 -70.9 -70.9 -70.9 ...
+##  $ LAT    : num  42.3 42.3 42.3 42.3 42.3 ...
+##  $ MEDV   : num  24 21.6 34.7 33.4 36.2 28.7 22.9 22.1 16.5 18.9 ...
+##  $ CRIM   : num  0.00632 0.02731 0.02729 0.03237 0.06905 ...
+##  $ ZN     : num  18 0 0 0 0 0 12.5 12.5 12.5 12.5 ...
+##  $ INDUS  : num  2.31 7.07 7.07 2.18 2.18 2.18 7.87 7.87 7.87 7.87 ...
+##  $ CHAS   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ NOX    : num  0.538 0.469 0.469 0.458 0.458 0.458 0.524 0.524 0.524 0.524 ...
+##  $ RM     : num  6.58 6.42 7.18 7 7.15 ...
+##  $ AGE    : num  65.2 78.9 61.1 45.8 54.2 58.7 66.6 96.1 100 85.9 ...
+##  $ DIS    : num  4.09 4.97 4.97 6.06 6.06 ...
+##  $ RAD    : int  1 2 2 3 3 3 5 5 5 5 ...
+##  $ TAX    : int  296 242 242 222 222 222 311 311 311 311 ...
+##  $ PTRATIO: num  15.3 17.8 17.8 18.7 18.7 18.7 15.2 15.2 15.2 15.2 ...
+\end{verbatim}
+\begin{alltt}
+
+\hlcom{# Summary of polution}
+\hlkwd{summary}(boston$NOX)
+\end{alltt}
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.385   0.449   0.538   0.555   0.624   0.871
+\end{verbatim}
+\begin{alltt}
+
+\hlcom{# Summary of median value prices}
+\hlkwd{summary}(boston$MEDV)
+\end{alltt}
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     5.0    17.0    21.2    22.5    25.0    50.0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+ 
+2. Set the format of all object called pdf()
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+my_pdf = \hlkwd{function}(file, width, height) \{
+    \hlkwd{pdf}(file, width = 6, height = 4, pointsize = 4)
+\}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+ 
+3. See the scatter plots
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Plot observations}
+\hlkwd{par}(mar=\hlkwd{c}(4,5,4,1.5))
+\hlkwd{plot}(boston$LON, boston$LAT)
+\hlcom{# Tracts alongside the Charles River}
+\hlkwd{points}(boston$LON[boston$CHAS==1], boston$LAT[boston$CHAS==1],
+       
+       col=\hlstr{"blue"}, pch=19)
+
+\hlcom{# Plot MIT}
+\hlkwd{points}(boston$LON[boston$TRACT==3531],boston$LAT[boston$TRACT==3531],
+       col=\hlstr{"red"}, pch=20)
+
+\hlcom{# Plot polution}
+\hlkwd{points}(boston$LON[boston$NOX>=0.55], boston$LAT[boston$NOX>=0.55], 
+       col=\hlstr{"green"}, pch=20)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/chunk21} 
+\begin{kframe}\begin{alltt}
+
+\hlcom{# Plot prices}
+\hlkwd{plot}(boston$LON, boston$LAT)
+\hlkwd{points}(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], 
+       col=\hlstr{"red"}, pch=20)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/chunk22} 
+\begin{kframe}\begin{alltt}
+
+\hlcom{# Plot LAT and LON vs. MEDV}
+\hlkwd{plot}(boston$LAT, boston$MEDV)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/chunk23} 
+\begin{kframe}\begin{alltt}
+\hlkwd{plot}(boston$LON, boston$MEDV)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/chunk24} 
+
+\end{knitrout}
+
+
+\section{Multivariate Regression Model}
+Build a linear regression model by regressing MEDV on LAT and LON!
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+latlonlm <- \hlkwd{lm}(MEDV ~ LAT + LON, data = boston)
+\hlkwd{summary}(latlonlm)
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = MEDV ~ LAT + LON, data = boston)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -16.46  -5.59  -1.30   3.69  28.13 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -3178.47     484.94   -6.55  1.4e-10 ***
+## LAT             8.05       6.33    1.27      0.2    
+## LON           -40.27       5.18   -7.77  4.5e-14 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+## 
+## Residual standard error: 8.69 on 503 degrees of freedom
+## Multiple R-squared: 0.107,	Adjusted R-squared: 0.104 
+## F-statistic: 30.2 on 2 and 503 DF,  p-value: 4.16e-13
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+ 
+\subsection{Visualize the regression output}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Visualize regression output}
+\hlkwd{par}(mar=\hlkwd{c}(4,5,4,1.5))
+\hlkwd{plot}(boston$LON, boston$LAT)
+\hlkwd{points}(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], 
+       
+       col=\hlstr{"red"}, pch=20)
+\hlkwd{points}(boston$LON[latlonlm$fitted.values >= 21.2], 
+       boston$LAT[latlonlm$fitted.values >= 21.2], col=\hlstr{"blue"}, pch=\hlstr{"$"})
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/chunk4} 
+
+\end{knitrout}
+
+\end{document}

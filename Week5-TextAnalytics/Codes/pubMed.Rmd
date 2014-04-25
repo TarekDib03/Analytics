@@ -1,0 +1,144 @@
+MITx: 15.071x The Analytics Edge - AUTOMATING REVIEWS IN MEDICINE
+========================================================
+
+## *Introduction*
+The medical literature is enormous. Pubmed, a database of medical publications maintained by the U.S. National Library of Medicine, has indexed over 23 million medical publications. Further, the rate of medical publication has increased over time, and now there are nearly 1 million new publications in the field each year, or more than one per minute.
+
+The large size and fast-changing nature of the medical literature has increased the need for reviews, which search databases like Pubmed for papers on a particular topic and then report results from the papers found. While such reviews are often performed manually, with multiple people reviewing each search result, this is tedious and time consuming. In this problem, we will see how text analytics can be used to automate the process of information retrieval.
+
+The dataset consists of the titles (variable title) and abstracts (variable abstract) of papers retrieved in a Pubmed search. Each search result is labeled with whether the paper is a clinical trial testing a drug therapy for cancer (variable trial). These labels were obtained by two people reviewing each search result and accessing the actual paper if necessary, as part of a literature review of clinical trials testing drug therapies for advanced and metastatic breast cancer.
+
+## *Understanding the Data*
+```{r}
+# Data
+setwd("/home/tarek/Analytics/Weeks/Week5-TextAnalytics/Data")
+trials <- read.csv("clinical_trial.csv", stringsAsFactors = F)
+str(trials)
+
+# How many characters are there in the longest abstract?
+max(nchar(trials$abstract))
+
+# How many search results provided no abstract?
+sum(nchar(trials$abstract) == 0)
+
+# What is the shortest title of any article?
+trials$title[which.min(nchar(trials$title))]
+```
+
+## *Preparing the Corpus*
+```{r}
+# Pre process data
+library(tm)
+# Create Corpus
+corpusTitle <- Corpus(VectorSource(trials$title)) 
+corpusAbstract <- Corpus(VectorSource(trials$abstract)) 
+
+# Convert to lower case
+corpusTitle <- tm_map(corpusTitle, tolower)
+corpusAbstract <- tm_map(corpusAbstract, tolower)
+
+# Remove punctuation 
+corpusTitle <- tm_map(corpusTitle, removePunctuation)
+corpusAbstract <- tm_map(corpusAbstract, removePunctuation)
+
+# Remove Stop words
+corpusTitle <- tm_map(corpusTitle, removeWords, stopwords("english"))
+corpusAbstract <- tm_map(corpusAbstract, removeWords, stopwords("english"))
+
+# Stem the words
+corpusTitle <- tm_map(corpusTitle, stemDocument)
+corpusAbstract <- tm_map(corpusAbstract, stemDocument)
+
+# Look at the first document
+corpusTitle[[1]]
+
+# Create matrix
+dtmTitle <- DocumentTermMatrix(corpusTitle)
+dtmAbstract <- DocumentTermMatrix(corpusAbstract)
+dtmTitle
+dtmAbstract
+
+# Filter out sparse terms by keeping only terms that appear in at least 5% or more of the documents
+dtmTitle <- removeSparseTerms(dtmTitle, 0.95)
+dtmAbstract <- removeSparseTerms(dtmAbstract, 0.95)
+dtmTitle
+dtmAbstract
+
+# Convert dtmTitle and dtmAbstract to data frames
+titleDf <- as.data.frame(as.matrix(dtmTitle))
+abstractDf <- as.data.frame(as.matrix(dtmAbstract))
+```
+
+## *Building a Model*
+```{r}
+# We want to combine dtmTitle and dtmAbstract into a single data frame to make predictions. However, some of the variables in these data frames have the same names.
+
+colnames(titleDf) <- paste0("T", colnames(titleDf))
+colnames(abstractDf) <- paste0("A", colnames(abstractDf))
+colnames(titleDf)
+colnames(abstractDf)
+
+# Combine the two dataframes
+dtm <- cbind(titleDf, abstractDf)
+# Add the trial variable
+dtm$trial <- trials$trial
+
+# Load CaTools
+library(caTools)
+set.seed(144)
+spl <- sample.split(dtm$trial, SplitRatio = 0.7)
+train <- subset(dtm, spl == T)
+test <- subset(dtm, spl == F)
+
+# baseline model accuracy on the training set
+table(train$trial)[1] / sum(table(train$trial))
+
+# CART Model
+library(rpart)
+library(rpart.plot)
+trialsCART <- rpart(trial~., data=train, method="class")
+prp(trialsCART)
+
+# Predict using the trainig set. Because the CART tree assigns the same predicted probability to each leaf node and there are a small number of leaf nodes compared to data points, we expect exactly the same maximum predicted probability.
+predTrain <- predict(trialsCART)[,2]
+# Accuracy on the training set
+t1 <- table(train$trial, predTrain >= 0.5)
+(t1[1,1] + t1[2,2])/(sum(t1))
+
+# Sensitivity = TP/(TP+FN) and specificity=TN/(TN+FP)
+t1[2,2]/(t1[2,2] + t1[2,1])
+t1[1,1]/(t1[1,1] + t1[1,2])
+```
+
+## *EVALUATING THE MODEL ON THE TESTING SET*
+```{r}
+# Testing set accuracy
+predTest <- predict(trialsCART, newdata = test)[,2]
+t2 <- table(test$trial, predTest >= 0.5)
+(t2[1,1] + t2[2,2])/(sum(t2))
+
+# ROC Curve
+library(ROCR)
+
+predROCR = prediction(predTest[,2], test$trial)
+perfROCR = performance(predROCR, "tpr", "fpr")
+plot(perfROCR, colorize=TRUE)
+
+# Compute AUC
+performance(predROCR, "auc")@y.values
+```
+
+## *Decision-Maker TradeOffs*
+The decision maker for this problem, a researcher performing a review of the medical literature, would use a model (like the CART one we built here) in the following workflow:
+
+1) For all of the papers retreived in the PubMed Search, predict which papers are clinical trials using the model. This yields some initial Set A of papers predicted to be trials, and some Set B of papers predicted not to be trials.
+
+2) Then, the decision maker manually reviews all papers in Set A, verifying that each paper meets the study's detailed inclusion criteria (for the purposes of this analysis, we assume this manual review is 100% accurate at identifying whether a paper in Set A is relevant to the study). This yields a more limited set of papers to be included in the study, which would ideally be all papers in the medical literature meeting the detailed inclusion criteria for the study.
+
+3) Perform the study-specific analysis, using data extracted from the limited set of papers identified in step 2.
+
+By definition, a false negative is a paper that should have been included in Set A but was missed by the model. This means a study that should have been included in Step 3 was missed, affecting the results.
+
+By definition, a false positive is a paper that should not have been included in Set A but that was actually included. However, because the manual review in Step 2 is assumed to be 100% effective, this extra paper will not make it into the more limited set of papers, and therefore this mistake will not affect the analysis in Step 3.
+
+A false negative might negatively affect the results of the literature review and analysis, while a false positive is a nuisance (one additional paper that needs to be manually checked). As a result, the cost of a false negative is much higher than the cost of a false positive, so much so that many studies actually use no machine learning (aka no Step 1) and have two people manually review each search result in Step 2. As always, we prefer a lower threshold in cases where false negatives are more costly than false positives, since we will make fewer negative predictions.

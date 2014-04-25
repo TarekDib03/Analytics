@@ -1,0 +1,217 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage{amsfonts, amsmath, hanging, hyperref, natbib, parskip, times}
+\hypersetup{
+ colorlinks,
+ linkcolor=blue,
+ urlcolor=blue
+}
+
+\setlength{\topmargin}{-15mm}
+\setlength{\oddsidemargin}{-2mm}
+\setlength{\textwidth}{170mm}
+\setlength{\textheight}{250mm}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\usepackage{listings}
+\usepackage{float}
+\usepackage[english]{babel}
+\usepackage{setspace}
+\usepackage{mdframed}
+
+\title{MITx: 15.071x The Analytics Edge - Regression Trees for Housing Data in Boston}
+\author{Tarek Dib}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+A paper was written on the relationship between house prices and clean air in the late 1970s by David Harrison of Harvard and Daniel Rubinfeld of U. of Michigan. “Hedonic Housing Prices and the Demand for Clean Air” has been citedmore than 1000 times. Data set was widely used to evaluate algorithms. In this report, we will explore the dataset with the aid of trees, compare linear regression with regression trees, discuss what the “cp” parameter means and apply cross-validation to regression trees.
+
+\section{Understanding Data}
+Each entry corresponds to a census tract, a statistical division of the area that is used by researchers to break down towns and cities. There will be multiple census tracts per Town. There are 14 variables in the data set defined as listed below.
+\\
+\begin{enumerate}
+\item LON and LAT are the longitude and latitude of the center of the census tract.
+\item MEDV is the median value of owner-occupied homes, in thousands of dollars.
+\item CRIM is the per capita crime rate
+\item ZN is related to how much of the land is zoned for large residential properties
+\item INDUS is proportion of area used for industry
+\item CHAS is 1 if the census tract is next to the Charles River
+\item NOX is the concentration of nitrous oxides in the air
+\item RM is the average number of rooms per dwelling
+\item AGE is the proportion of owner-occupied units built before 1940
+\item DIS is a measure of how far the tract is from centers of employment in Boston
+\item RAD is a measure of closeness to important highways
+\item TAX is the property tax rate per \$10,000 of value
+\item PTRATIO is the pupil-teacher ratio by town
+\end{enumerate}
+
+\section{Exploratory Data Analysis}
+1. Summary Statistics
+<<chunk1, echo=TRUE, results='markup'>>=
+boston = read.csv("boston.csv")
+str(boston)
+
+# Summary of polution
+summary(boston$NOX)
+
+# Summary of median value prices
+summary(boston$MEDV)
+@
+ 
+2. Set the format of all object called pdf()
+<<custom-dev2>>=
+my_pdf = function(file, width, height) {pdf(file, width = 6, height = 4, pointsize = 4)}
+@
+ 
+3. See the scatter plots
+<<chunk2, echo=TRUE, results='markup', dev='my_pdf', fig.ext='pdf'>>=
+# Plot observations
+par(mar=c(4,5,4,1.5))
+plot(boston$LON, boston$LAT)
+# Tracts alongside the Charles River
+points(boston$LON[boston$CHAS==1], boston$LAT[boston$CHAS==1],
+       
+       col="blue", pch=19)
+
+# Plot MIT
+points(boston$LON[boston$TRACT==3531],boston$LAT[boston$TRACT==3531],
+       col="red", pch=20)
+
+# Plot polution
+points(boston$LON[boston$NOX>=0.55], boston$LAT[boston$NOX>=0.55], 
+       col="green", pch=20)
+
+# Plot prices
+plot(boston$LON, boston$LAT)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], 
+       col="red", pch=20)
+
+# Plot LAT and LON vs. MEDV
+plot(boston$LAT, boston$MEDV)
+plot(boston$LON, boston$MEDV)
+@
+
+\section{Multivariate Regression Model}
+Build a linear regression model by regressing MEDV on LAT and LON!
+<<chunk3, echo=TRUE, results='markup'>>=
+latlonlm <- lm(MEDV ~ LAT + LON, data = boston)
+summary(latlonlm)
+@
+ 
+\subsection{Visualize the regression output}
+<<chunk4, echo=TRUE, results='markup', dev='my_pdf', fig.ext='pdf'>>=
+# Visualize regression output
+par(mar=c(4,5,4,1.5))
+plot(boston$LON, boston$LAT)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], 
+       
+       col="red", pch=20)
+points(boston$LON[latlonlm$fitted.values >= 21.2], 
+       boston$LAT[latlonlm$fitted.values >= 21.2], col="blue", pch="$")
+@
+\section{Regression Tree}
+<<chunk5, echo=TRUE, results='markup'>>=
+library(rpart)
+library(rpart.plot)
+
+# CART model
+latlontree = rpart(MEDV ~ LAT + LON, data=boston)
+@
+
+<<chunk6, echo=TRUE, results='markup', dev='my_pdf', fig.ext='pdf'>>=
+# Tree
+par(mar=c(4,5,4,1.5))
+prp(latlontree)
+
+# Visualize output
+plot(boston$LON, boston$LAT)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], 
+       
+       col="red", pch=20)
+
+fittedvalues = predict(latlontree)
+points(boston$LON[fittedvalues>=21.2], boston$LAT[fittedvalues>=21.2], 
+       col="blue", pch="$")
+
+# Simplify tree by increasing minbucket
+latlontree = rpart(MEDV ~ LAT + LON, data=boston, minbucket=50)
+plot(latlontree)
+text(latlontree)
+
+# Visualize Output
+plot(boston$LON,boston$LAT)
+abline(v=-71.07)
+abline(h=42.21)
+abline(h=42.17)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], 
+       col="red", pch=20)
+@
+
+\section{Comparison of Linear Regression and Regression Tree Models}
+<<chunk7, echo=TRUE, results='markup', dev='my_pdf', fig.ext='pdf'>>=
+# Let's use all the variables
+
+# Split the data
+library(caTools)
+set.seed(123)
+split = sample.split(boston$MEDV, SplitRatio = 0.7)
+train = subset(boston, split==TRUE)
+test = subset(boston, split==FALSE)
+
+# Create linear regression
+linreg = lm(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + 
+              
+              DIS + RAD + TAX + PTRATIO, data=train)
+summary(linreg)
+
+# Make predictions
+linreg.pred = predict(linreg, newdata=test)
+linreg.sse = sum((linreg.pred - test$MEDV)^2)
+linreg.sse
+
+# Create a CART model
+tree = rpart(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE +
+               DIS + RAD + TAX + PTRATIO, data=train)
+prp(tree)
+
+# Make predictions
+tree.pred = predict(tree, newdata=test)
+tree.sse = sum((tree.pred - test$MEDV)^2)
+tree.sse
+@
+
+\section{Cross Validation}
+<<chunk8, echo=TRUE, results='markup', dev='my_pdf', fig.ext='pdf'>>=
+# Load libraries for cross-validation
+library(caret)
+library(e1071)
+
+# Number of folds
+tr.control = trainControl(method = "cv", number = 10)
+
+# cp values
+cp.grid = expand.grid( .cp = (0:10)*0.001)
+
+# Cross-validation
+tr = train(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + 
+             
+             DIS + RAD + TAX + PTRATIO, data = train, method = "rpart", 
+           trControl = tr.control, tuneGrid = cp.grid)
+tr
+# Extract tree
+best.tree = tr$finalModel
+prp(best.tree)
+
+# Make predictions
+best.tree.pred = predict(best.tree, newdata=test)
+best.tree.sse = sum((best.tree.pred - test$MEDV)^2)
+best.tree.sse
+@
+\end{document}

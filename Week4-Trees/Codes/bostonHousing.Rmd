@@ -1,0 +1,162 @@
+MITx: 15.071x The Analytics Edge - Regression Trees for Housing Data in Boston
+========================================================
+### Tarek Dib
+### April 6, 2014
+
+# *Introduction*
+A paper was written on the relationship between house prices and clean air in the late 1970s by David Harrison of Harvard and Daniel Rubinfeld of U. of Michigan. “Hedonic Housing Prices and the Demand for Clean Air” has been citedmore than 1000 times. Data set was widely used to evaluate algorithms. In this report, we will explore the dataset with the aid of trees, compare linear regression with regression trees, discuss what the “cp” parameter means and apply cross-validation to regression trees.
+
+# *Understanding the Data*
+Each entry corresponds to a census tract, a statistical division of the area that is used by researchers to break down towns and cities. There will be multiple census tracts per Town.
+
+### *Variables*
+    LON and LAT are the longitude and latitude of the center of the census tract.
+    MEDV is the median value of owner-occupied homes, in thousands of dollars.
+    CRIM is the per capita crime rate
+    ZN is related to how much of the land is zoned for large residential properties
+    INDUS is proportion of area used for industry
+    CHAS is 1 if the census tract is next to the Charles River
+    NOX is the concentration of nitrous oxides in the air
+    RM is the average number of rooms per dwelling
+    AGE is the proportion of owner-occupied units built before 1940
+    DIS is a measure of how far the tract is from centers of employment in Boston
+    RAD is a measure of closeness to important highways
+    TAX is the property tax rate per $10,000 of value
+    PTRATIO is the pupil-teacher ratio by town
+# *Exploratory Data Analysis*
+```{r}
+# Read Data
+boston = read.csv("boston.csv")
+str(boston)
+
+# Summary of polution
+summary(boston$NOX)
+
+# Summary of median value prices
+summary(boston$MEDV)
+```
+
+```{r fig.width=12, fig.height=8}
+# Plot observations
+plot(boston$LON, boston$LAT)
+
+# Tracts alongside the Charles River
+points(boston$LON[boston$CHAS==1], boston$LAT[boston$CHAS==1], col="blue", pch=19)
+
+# Plot MIT
+points(boston$LON[boston$TRACT==3531],boston$LAT[boston$TRACT==3531],col="red", pch=20)
+
+# Plot polution
+points(boston$LON[boston$NOX>=0.55], boston$LAT[boston$NOX>=0.55], col="green", pch=20)
+
+# Plot prices
+plot(boston$LON, boston$LAT)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], col="red", pch=20)
+
+# Plot LAT and LON vs. MEDV
+plot(boston$LAT, boston$MEDV)
+plot(boston$LON, boston$MEDV)
+```
+# *Regression Model*
+```{r code-output}
+latlonlm <- lm(MEDV ~ LAT + LON, data = boston)
+summary(latlonlm)
+#latlonlm$fitted.values
+```
+
+```{r fig.width=12, fig.height=8}
+# Visualize regression output
+plot(boston$LON, boston$LAT)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], col="red", pch=20)
+
+points(boston$LON[latlonlm$fitted.values >= 21.2], boston$LAT[latlonlm$fitted.values >= 21.2], col="blue", pch="$")
+```
+# *Regression Tree*
+```{r}
+# Load CART packages
+library(rpart)
+library(rpart.plot)
+
+# CART model
+latlontree = rpart(MEDV ~ LAT + LON, data=boston)
+```
+
+```{r fig.width=12, fig.height=8}
+# Tree
+prp(latlontree)
+
+# Visualize output
+plot(boston$LON, boston$LAT)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], col="red", pch=20)
+
+fittedvalues = predict(latlontree)
+points(boston$LON[fittedvalues>=21.2], boston$LAT[fittedvalues>=21.2], col="blue", pch="$")
+
+# Simplify tree by increasing minbucket
+latlontree = rpart(MEDV ~ LAT + LON, data=boston, minbucket=50)
+plot(latlontree)
+text(latlontree)
+
+# Visualize Output
+plot(boston$LON,boston$LAT)
+abline(v=-71.07)
+abline(h=42.21)
+abline(h=42.17)
+points(boston$LON[boston$MEDV>=21.2], boston$LAT[boston$MEDV>=21.2], col="red", pch=20)
+```
+
+# *Building Models*
+```{r}
+# Let's use all the variables
+
+# Split the data
+library(caTools)
+set.seed(123)
+split = sample.split(boston$MEDV, SplitRatio = 0.7)
+train = subset(boston, split==TRUE)
+test = subset(boston, split==FALSE)
+
+# Create linear regression
+linreg = lm(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO, data=train)
+summary(linreg)
+
+# Make predictions
+linreg.pred = predict(linreg, newdata=test)
+linreg.sse = sum((linreg.pred - test$MEDV)^2)
+linreg.sse
+
+# Create a CART model
+tree = rpart(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO, data=train)
+prp(tree)
+
+# Make predictions
+tree.pred = predict(tree, newdata=test)
+tree.sse = sum((tree.pred - test$MEDV)^2)
+tree.sse
+```
+Thus, regression trees are not as good as linear regression for predicting the average median prices in Boston!
+# *Cross Validation*
+```{r}
+# Load libraries for cross-validation
+library(caret)
+library(e1071)
+
+# Number of folds
+tr.control = trainControl(method = "cv", number = 10)
+
+# cp values
+cp.grid = expand.grid( .cp = (0:10)*0.001)
+
+# Cross-validation
+tr = train(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO, data = train, method = "rpart", trControl = tr.control, tuneGrid = cp.grid)
+tr
+# Extract tree
+best.tree = tr$finalModel
+prp(best.tree)
+
+# Make predictions
+best.tree.pred = predict(best.tree, newdata=test)
+best.tree.sse = sum((best.tree.pred - test$MEDV)^2)
+best.tree.sse
+```
+Again, linear regression is still a better model than the cross-validation method!

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>MITx: 15.071x The Analytics Edge</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h2>MITx: 15.071x The Analytics Edge</h2>
+
+<h3>Predicting loan repayment and Risk</h3>
+
+<h4>Tarek Dib</h4>
+
+<h4>Date: March 24, 2014</h4>
+
+<h2><em>Introduction</em></h2>
+
+<p>In the lending industry, investors provide loans to borrowers in exchange for the promise of repayment with interest. If the borrower repays the loan, then the lender profits from the interest. However, if the borrower is unable to repay the loan, then the lender loses money. Therefore, lenders face the problem of predicting the risk of a borrower being unable to repay a loan.</p>
+
+<p>To address this problem, we will use publicly available data from LendingClub.com, a website that connects borrowers and investors over the Internet. This dataset represents 9,578 3-year loans that were funded through the LendingClub.com platform between May 2007 and February 2010. The binary dependent variable &ldquo;not_fully_paid&rdquo; indicates that the loan was not paid back in full (the borrower either defaulted or the loan was &ldquo;charged off,&rdquo; meaning the borrower was deemed unlikely to ever pay it back).</p>
+
+<p>To predict this dependent variable, we will use the following independent variables available to the investor when deciding whether to fund a loan:</p>
+
+<pre><code>credit.policy: 1 if the customer meets the credit underwriting criteria of LendingClub.com, and 0 otherwise.
+purpose: The purpose of the loan (takes values &quot;credit_card&quot;, &quot;debt_consolidation&quot;, &quot;educational&quot;, &quot;major_purchase&quot;, &quot;small_business&quot;, and &quot;all_other&quot;).
+int.rate: The interest rate of the loan, as a proportion (a rate of 11% would be stored as 0.11). Borrowers judged by LendingClub.com to be more risky are assigned higher interest rates.
+installment: The monthly installments ($) owed by the borrower if the loan is funded.
+log.annual.inc: The natural log of the self-reported annual income of the borrower.
+dti: The debt-to-income ratio of the borrower (amount of debt divided by annual income).
+fico: The FICO credit score of the borrower.
+days.with.cr.line: The number of days the borrower has had a credit line.
+revol.bal: The borrower&#39;s revolving balance (amount unpaid at the end of the credit card billing cycle).
+revol.util: The borrower&#39;s revolving line utilization rate (the amount of the credit line used relative to total credit available).
+inq.last.6mths: The borrower&#39;s number of inquiries by creditors in the last 6 months.
+delinq.2yrs: The number of times the borrower had been 30+ days past due on a payment in the past 2 years.
+pub.rec: The borrower&#39;s number of derogatory public records (bankruptcy filings, tax liens, or judgments).
+</code></pre>
+
+<h2><em>Preparing the Dataset</em></h2>
+
+<pre><code class="r">loans &lt;- read.csv(&quot;loans.csv&quot;)
+str(loans)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    9578 obs. of  14 variables:
+##  $ credit.policy    : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ purpose          : Factor w/ 7 levels &quot;all_other&quot;,&quot;credit_card&quot;,..: 3 2 3 3 2 2 3 1 5 3 ...
+##  $ int.rate         : num  0.119 0.107 0.136 0.101 0.143 ...
+##  $ installment      : num  829 228 367 162 103 ...
+##  $ log.annual.inc   : num  11.4 11.1 10.4 11.4 11.3 ...
+##  $ dti              : num  19.5 14.3 11.6 8.1 15 ...
+##  $ fico             : int  737 707 682 712 667 727 667 722 682 707 ...
+##  $ days.with.cr.line: num  5640 2760 4710 2700 4066 ...
+##  $ revol.bal        : int  28854 33623 3511 33667 4740 50807 3839 24220 69909 5630 ...
+##  $ revol.util       : num  52.1 76.7 25.6 73.2 39.5 51 76.8 68.6 51.1 23 ...
+##  $ inq.last.6mths   : int  0 0 1 1 0 0 0 0 1 1 ...
+##  $ delinq.2yrs      : int  0 0 0 0 1 0 0 0 0 0 ...
+##  $ pub.rec          : int  0 0 0 0 0 0 1 0 0 0 ...
+##  $ not.fully.paid   : int  0 0 0 0 0 0 1 1 0 0 ...
+</code></pre>
+
+<pre><code class="r">summary(loans)
+</code></pre>
+
+<pre><code>##  credit.policy                 purpose        int.rate      installment   
+##  Min.   :0.000   all_other         :2331   Min.   :0.060   Min.   : 15.7  
+##  1st Qu.:1.000   credit_card       :1262   1st Qu.:0.104   1st Qu.:163.8  
+##  Median :1.000   debt_consolidation:3957   Median :0.122   Median :268.9  
+##  Mean   :0.805   educational       : 343   Mean   :0.123   Mean   :319.1  
+##  3rd Qu.:1.000   home_improvement  : 629   3rd Qu.:0.141   3rd Qu.:432.8  
+##  Max.   :1.000   major_purchase    : 437   Max.   :0.216   Max.   :940.1  
+##                  small_business    : 619                                  
+##  log.annual.inc       dti             fico     days.with.cr.line
+##  Min.   : 7.55   Min.   : 0.00   Min.   :612   Min.   :  179    
+##  1st Qu.:10.56   1st Qu.: 7.21   1st Qu.:682   1st Qu.: 2820    
+##  Median :10.93   Median :12.66   Median :707   Median : 4140    
+##  Mean   :10.93   Mean   :12.61   Mean   :711   Mean   : 4562    
+##  3rd Qu.:11.29   3rd Qu.:17.95   3rd Qu.:737   3rd Qu.: 5730    
+##  Max.   :14.53   Max.   :29.96   Max.   :827   Max.   :17640    
+##  NA&#39;s   :4                                     NA&#39;s   :29       
+##    revol.bal         revol.util    inq.last.6mths   delinq.2yrs    
+##  Min.   :      0   Min.   :  0.0   Min.   : 0.00   Min.   : 0.000  
+##  1st Qu.:   3187   1st Qu.: 22.7   1st Qu.: 0.00   1st Qu.: 0.000  
+##  Median :   8596   Median : 46.4   Median : 1.00   Median : 0.000  
+##  Mean   :  16914   Mean   : 46.9   Mean   : 1.57   Mean   : 0.164  
+##  3rd Qu.:  18250   3rd Qu.: 71.0   3rd Qu.: 2.00   3rd Qu.: 0.000  
+##  Max.   :1207359   Max.   :119.0   Max.   :33.00   Max.   :13.000  
+##                    NA&#39;s   :62      NA&#39;s   :29      NA&#39;s   :29      
+##     pub.rec      not.fully.paid
+##  Min.   :0.000   Min.   :0.00  
+##  1st Qu.:0.000   1st Qu.:0.00  
+##  Median :0.000   Median :0.00  
+##  Mean   :0.062   Mean   :0.16  
+##  3rd Qu.:0.000   3rd Qu.:0.00  
+##  Max.   :5.000   Max.   :1.00  
+##  NA&#39;s   :29
+</code></pre>
+
+<pre><code class="r">
+# Variables with at least one missing observation
+names(which(sapply(loans, function(x) sum(is.na(x)) &gt;= 1) == &quot;TRUE&quot;))
+</code></pre>
+
+<pre><code>## [1] &quot;log.annual.inc&quot;    &quot;days.with.cr.line&quot; &quot;revol.util&quot;       
+## [4] &quot;inq.last.6mths&quot;    &quot;delinq.2yrs&quot;       &quot;pub.rec&quot;
+</code></pre>
+
+<pre><code class="r"># Proportion of not fully paid loans
+as.numeric(table(loans$not.fully.paid)/nrow(loans))[2]
+</code></pre>
+
+<pre><code>## [1] 0.1601
+</code></pre>
+
+<pre><code class="r">
+# Data frame with missing observations
+missing = subset(loans, is.na(log.annual.inc) | is.na(days.with.cr.line) | is.na(revol.util) | 
+    is.na(inq.last.6mths) | is.na(delinq.2yrs) | is.na(pub.rec))
+nrow(missing)  # removing this small number of observations would not lead to overfitting
+</code></pre>
+
+<pre><code>## [1] 62
+</code></pre>
+
+<pre><code class="r"># Proportion of not fully paid in the missing data frame
+as.numeric(table(missing$not.fully.paid)/nrow(missing))[2]  # This rate is similar to the 16.01% across all loans, so the form of biasing described is not an issue
+</code></pre>
+
+<pre><code>## [1] 0.1935
+</code></pre>
+
+<pre><code class="r">
+# Load VIM library
+library(VIM)
+</code></pre>
+
+<pre><code>## Loading required package: colorspace
+## Loading required package: grid
+## VIM is ready to use. 
+##  Since version 4.0.0 the GUI is in its own package VIMGUI.
+## 
+##           Please use the package to use the new (and old) GUI.
+## 
+## 
+## Attaching package: &#39;VIM&#39;
+## 
+## The following object(s) are masked from &#39;package:datasets&#39;:
+## 
+##     sleep
+</code></pre>
+
+<pre><code class="r">set.seed(144)
+# Set variables to be imputed. All the predictors vars.for.imputation =
+# setdiff(names(loans), &#39;not.fully.paid&#39;) imputed =
+# irmi(loans[vars.for.imputation]) loans[vars.for.imputation] = imputed
+# summary(loans) Read imputed data set to compare to the above imputed
+# data
+loans_imputed &lt;- read.csv(&quot;loans_imputed.csv&quot;)  # Use this instead of the one developed using VIM
+summary(loans_imputed)
+</code></pre>
+
+<pre><code>##  credit.policy                 purpose        int.rate      installment   
+##  Min.   :0.000   all_other         :2331   Min.   :0.060   Min.   : 15.7  
+##  1st Qu.:1.000   credit_card       :1262   1st Qu.:0.104   1st Qu.:163.8  
+##  Median :1.000   debt_consolidation:3957   Median :0.122   Median :268.9  
+##  Mean   :0.805   educational       : 343   Mean   :0.123   Mean   :319.1  
+##  3rd Qu.:1.000   home_improvement  : 629   3rd Qu.:0.141   3rd Qu.:432.8  
+##  Max.   :1.000   major_purchase    : 437   Max.   :0.216   Max.   :940.1  
+##                  small_business    : 619                                  
+##  log.annual.inc       dti             fico     days.with.cr.line
+##  Min.   : 7.55   Min.   : 0.00   Min.   :612   Min.   :  179    
+##  1st Qu.:10.56   1st Qu.: 7.21   1st Qu.:682   1st Qu.: 2820    
+##  Median :10.93   Median :12.66   Median :707   Median : 4140    
+##  Mean   :10.93   Mean   :12.61   Mean   :711   Mean   : 4561    
+##  3rd Qu.:11.29   3rd Qu.:17.95   3rd Qu.:737   3rd Qu.: 5730    
+##  Max.   :14.53   Max.   :29.96   Max.   :827   Max.   :17640    
+##                                                                 
+##    revol.bal         revol.util    inq.last.6mths   delinq.2yrs    
+##  Min.   :      0   Min.   :  0.0   Min.   : 0.00   Min.   : 0.000  
+##  1st Qu.:   3187   1st Qu.: 22.6   1st Qu.: 0.00   1st Qu.: 0.000  
+##  Median :   8596   Median : 46.3   Median : 1.00   Median : 0.000  
+##  Mean   :  16914   Mean   : 46.8   Mean   : 1.58   Mean   : 0.164  
+##  3rd Qu.:  18250   3rd Qu.: 70.9   3rd Qu.: 2.00   3rd Qu.: 0.000  
+##  Max.   :1207359   Max.   :119.0   Max.   :33.00   Max.   :13.000  
+##                                                                    
+##     pub.rec      not.fully.paid
+##  Min.   :0.000   Min.   :0.00  
+##  1st Qu.:0.000   1st Qu.:0.00  
+##  Median :0.000   Median :0.00  
+##  Mean   :0.062   Mean   :0.16  
+##  3rd Qu.:0.000   3rd Qu.:0.00  
+##  Max.   :5.000   Max.   :1.00  
+## 
+</code></pre>
+
+<h2><em>Prediction Models</em></h2>
+
+<pre><code class="r">loans_imputed$purpose = as.factor(loans_imputed$purpose)
+set.seed(144)
+# Load caTools to use sample.split function
+library(caTools)
+split &lt;- sample.split(loans_imputed$not.fully.paid, SplitRatio = 0.7)
+train &lt;- subset(loans_imputed, split == TRUE)
+test &lt;- subset(loans_imputed, split == FALSE)
+
+# Build the model using training set
+mod &lt;- glm(not.fully.paid ~ ., data = train, family = &quot;binomial&quot;)
+# index of Significant predictors
+id &lt;- which(summary(mod)$coeff[, 4] &lt; 0.05)
+# Significant predictors
+coeff.sig &lt;- summary(mod)$coeff[, 1][id]
+names(coeff.sig)
+</code></pre>
+
+<pre><code>##  [1] &quot;(Intercept)&quot;               &quot;credit.policy&quot;            
+##  [3] &quot;purposecredit_card&quot;        &quot;purposedebt_consolidation&quot;
+##  [5] &quot;purposemajor_purchase&quot;     &quot;purposesmall_business&quot;    
+##  [7] &quot;installment&quot;               &quot;log.annual.inc&quot;           
+##  [9] &quot;fico&quot;                      &quot;revol.bal&quot;                
+## [11] &quot;inq.last.6mths&quot;            &quot;pub.rec&quot;
+</code></pre>
+
+<pre><code class="r">
+# Predict the probability of not fully paid back using the testing set
+predicted.risk &lt;- predict(mod, newdata = test, type = &quot;response&quot;)
+# Add the predicted.risk variable to the test set
+test$predicted.risk &lt;- predicted.risk
+# Create the confusion matrix of the test set
+Conf &lt;- table(test$not.fully.paid, predicted.risk &gt; 0.5)
+# Accuracy of the logistic regression model
+(Conf[1, 1] + Conf[2, 2])/sum(Conf)
+</code></pre>
+
+<pre><code>## [1] 0.8364
+</code></pre>
+
+<pre><code class="r"># Accuracy of the baseline model
+
+# Load the ROCR to estimate the AUC (Area Under Curve or c statistics)
+library(ROCR)
+</code></pre>
+
+<pre><code>## Loading required package: gplots
+## Loading required package: gtools
+## Loading required package: gdata
+## gdata: read.xls support for &#39;XLS&#39; (Excel 97-2004) files ENABLED.
+## 
+## gdata: read.xls support for &#39;XLSX&#39; (Excel 2007+) files ENABLED.
+## 
+## Attaching package: &#39;gdata&#39;
+## 
+## The following object(s) are masked from &#39;package:stats&#39;:
+## 
+##     nobs
+## 
+## The following object(s) are masked from &#39;package:utils&#39;:
+## 
+##     object.size
+## 
+## 
+## Attaching package: &#39;gplots&#39;
+## 
+## The following object(s) are masked from &#39;package:stats&#39;:
+## 
+##     lowess
+</code></pre>
+
+<pre><code class="r">ROCRpred &lt;- prediction(predicted.risk, test$not.fully.paid)
+as.numeric(performance(ROCRpred, &quot;auc&quot;)@y.values)
+</code></pre>
+
+<pre><code>## [1] 0.6721
+</code></pre>
+
+<h2><em>Smart Baseline</em></h2>
+
+<p>In the previous problem, we built a logistic regression model that has an AUC significantly higher than the AUC of 0.5 that would be obtained by randomly ordering observations.</p>
+
+<p>However, LendingClub.com assigns the interest rate to a loan based on their estimate of that loan&#39;s risk. This variable, int.rate, is an independent variable in our dataset. In this part, we will investigate using the loan&#39;s interest rate as a &ldquo;smart baseline&rdquo; to order the loans according to risk.</p>
+
+<pre><code class="r"># Train a bivariate logistic regression model.
+bivariate = glm(not.fully.paid ~ int.rate, data = train, family = &quot;binomial&quot;)
+summary(bivariate)  # In this model, int.rate is highly significant
+</code></pre>
+
+<pre><code>## 
+## Call:
+## glm(formula = not.fully.paid ~ int.rate, family = &quot;binomial&quot;, 
+##     data = train)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.055  -0.627  -0.544  -0.436   2.291  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   -3.673      0.169   -21.8   &lt;2e-16 ***
+## int.rate      15.921      1.270    12.5   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 5896.6  on 6704  degrees of freedom
+## Residual deviance: 5734.8  on 6703  degrees of freedom
+## AIC: 5739
+## 
+## Number of Fisher Scoring iterations: 4
+</code></pre>
+
+<pre><code class="r">cor(train$int.rate, train$fico)  # Highly correlated. That&#39;s why in the multivariate model, int.rate was no significant
+</code></pre>
+
+<pre><code>## [1] -0.7117
+</code></pre>
+
+<pre><code class="r">
+# Make test set predictions for the bivariate model.
+bivariate.Pred &lt;- predict(bivariate, newdata = test, type = &quot;response&quot;)
+# Highest predicted probability of a loan not being paid in full on the
+# testing set
+max(summary(bivariate.Pred))
+</code></pre>
+
+<pre><code>## [1] 0.427
+</code></pre>
+
+<pre><code class="r">
+# AUC for the Bivariate model
+prediction.bivariate &lt;- prediction(bivariate.Pred, test$not.fully.paid)
+as.numeric(performance(prediction.bivariate, &quot;auc&quot;)@y.values)
+</code></pre>
+
+<pre><code>## [1] 0.6239
+</code></pre>
+
+<h2><em>A Simple Investment Strategy</em></h2>
+
+<p>While thus far we have predicted if a loan will be paid back or not, an investor needs to identify loans that are expected to be profitable. If the loan is paid back in full, then the investor makes interest on the loan. However, if the loan is not paid back, the investor loses the money invested. Therefore, the investor should seek loans that best balance this risk and reward.</p>
+
+<p>To compute interest revenue, consider a $c investment in a loan that has an annual interest rate r over a period of t years. Using continuous compounding of interest, this investment pays back c * exp(rt) dollars by the end of the t years.</p>
+
+<p>An investor who invested c dollars in a loan with interest rate r for t years makes c * (exp(rt) - 1) dollars of profit if the loan is paid back in full and -c dollars of profit if the loan is not paid back in full.</p>
+
+<p>In order to evaluate the quality of an investment strategy, we need to compute this profit for each loan in the test set. For this variable, we will assume a $1 investment (aka c=1). To create the variable, we first assign to the profit for a fully paid loan, exp(rt)-1, to every observation, and we then replace this value with -1 in the cases where the loan was not paid in full. All the loans in our dataset are 3-year loans, so t=3.</p>
+
+<pre><code class="r">test$profit = exp(test$int.rate * 3) - 1
+# Replace the values of the variable above with -1 in the cases where the
+# loan was not paid in full.
+test$profit[test$not.fully.paid == 1] = -1
+# Maximum profit if a $10 was invested
+max(test$profit) * 10
+</code></pre>
+
+<pre><code>## [1] 8.895
+</code></pre>
+
+<h2><em>An Investment Strategy Based on Risk</em></h2>
+
+<p>A simple investment strategy of equally investing in all the loans would yield profit $20.94 for a $100 investment. But this simple investment strategy does not leverage the prediction model we built earlier in this problem. As stated earlier, investors seek loans that balance reward with risk, in that they simultaneously have high interest rates and a low risk of not being paid back.</p>
+
+<p>To meet this objective, we will analyze an investment strategy in which the investor only purchases loans with a high interest rate (a rate of at least 15%), but amongst these loans selects the ones with the lowest predicted risk of not being paid back in full. We will model an investor who invests $1 in each of the most promising 100 loans.</p>
+
+<pre><code class="r"># Build a data frame called highInterest consisting of the test set loans
+# with an interest rate of at least 15%.
+highInterest &lt;- subset(test, test$int.rate &gt;= 0.15)
+# Ratio of loans that were not fully paid in the highInterest rate data
+# set
+as.numeric(table(highInterest$not.fully.paid)/sum(table(highInterest$not.fully.paid)))[2]
+</code></pre>
+
+<pre><code>## [1] 0.2517
+</code></pre>
+
+<pre><code class="r">
+# We will determine the 100th smallest predicted probability of not paying
+# in full by sorting the predicted risks in increasing order and selecting
+# the 100th element of this sorted list.
+cutoff = sort(highInterest$predicted.risk, decreasing = FALSE)[100]
+# Build a data frame called selectedLoans consisting of the high-interest
+# loans with predicted risk not exceeding the cutoff
+selectedLoans &lt;- subset(highInterest, highInterest$predicted.risk &lt;= cutoff)
+# Number of loans that were not fully paid in selected 100 loans
+table(selectedLoans$not.fully.paid)
+</code></pre>
+
+<pre><code>## 
+##  0  1 
+## 81 19
+</code></pre>
+
+<pre><code class="r"># Or
+sum(selectedLoans$profit == -1)
+</code></pre>
+
+<pre><code>## [1] 19
+</code></pre>
+
+</body>
+
+</html>
+

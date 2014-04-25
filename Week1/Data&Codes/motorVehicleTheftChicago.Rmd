@@ -1,0 +1,96 @@
+Data Analysis and Statistical Inference Project 
+========================================================
+# Tarek Dib
+
+## *Introduction*
+Crime is an international concern, but it is documented and handled in very different ways in different countries. In the United States, violent crimes and property crimes are recorded by the Federal Bureau of Investigation (FBI).  Additionally, each city documents crime, and some cities release data regarding crime rates. The city of Chicag, Illinois releases crime data from 2001 onward online. Chicago is the third most populous city in the United States, with a population of over 2.7 million people.
+
+There are two main types of crimes: violent crimes, and property crimes. In this proble, we'll focus on one specific type of property crime, called "motor vehicle theft" (sometimes referred to as grand theft auto). This is the act of stealing, or attempting to steal, a car. In this problem, we'll use some basic data analysis in R to understand the motor vehicle thefts in Chicago. 
+
+## *Variables*
+    ID: a unique identifier for each observation
+    Date: the date the crime occurred
+    LocationDescription: the location where the crime occurred
+    Arrest: whether or not an arrest was made for the crime (TRUE if an arrest was made, and FALSE if an arrest was not made)
+    Domestic: whether or not the crime was a domestic crime, meaning that it was committed against a family member (TRUE if it was domestic, and FALSE if it was not domestic)
+    Beat: the area, or "beat" in which the crime occurred. This is the smallest regional division defined by the Chicago police department.
+    District: the police district in which the crime occured. Each district is composed of many beats, and are defined by the Chicago Police Department.
+    CommunityArea: the community area in which the crime occurred. Since the 1920s, Chicago has been divided into what are called "community areas", of which there are now 77. The community areas were devised in an attempt to create socially homogeneous regions.
+    Year: the year in which the crime occurred.
+    Latitude: the latitude of the location at which the crime occurred.
+    Longitude: the longitude of the location at which the crime occurred.
+
+## *Loading Data and Descriptive Statistics*
+```{r}
+# Set the directory at where the data is located
+setwd("/home/tarek/Analytics/Week1/Rlectures/Data")
+# Read the Data
+mvt <- read.csv("mvt.csv")
+# Structure of data
+str(mvt)
+# number of crimes for which an arrest was made
+sum(mvt$Arrest=="TRUE")
+# Convert date characters into a Date object in R
+DateConvert = as.Date(strptime(mvt$Date, "%m/%d/%y %H:%M"))
+summary(DateConvert)
+# extract the month and the day of the week, and add these variables to our data frame mvt
+mvt$Month = months(DateConvert)
+mvt$Weekday = weekdays(DateConvert)
+# Replace the old Date variable with DateConvert
+mvt$Date = DateConvert
+# month that had the fewest motor vehicle thefts
+which.min(table(mvt$Month))
+# weekday that had the most motor vehicle thefts 
+which.max(table(mvt$Weekday))
+# month that has the largest number of motor vehicle thefts for which an arrest was made
+which.max(table(mvt$Arrest=="TRUE", mvt$Month)[2,])
+table(mvt$Month)
+# Proportion of motor vehicle thefts in 2001 in which an arrest was made
+sum(mvt$Year==2001 & mvt$Arrest=="TRUE")/sum(mvt$Year==2001)
+# Arrests made in 2007 and 2012
+sum(mvt$Year==2007 & mvt$Arrest=="TRUE")/sum(mvt$Year==2007)
+sum(mvt$Year==2012 & mvt$Arrest=="TRUE")/sum(mvt$Year==2012)
+write.table(mvt, "mvtData.csv")
+```
+
+*Popular Locations*
+--------------------------------------------------------------------------
+Analyzing this data could be useful to the Chicago Police Department when deciding where to allocate resources. If they want to increase the number of arrests that are made for motor vehicle thefts, where should they focus their efforts?
+```{r}
+sort(table(mvt$LocationDescription))[73:78]
+# Create a subset of data, only taking observations for which the theft happened in one of the top 5 locations
+TopLocations = c("STREET", "PARKING LOT/GARAGE(NON.RESID.)", "ALLEY", "GAS STATION", "DRIVEWAY - RESIDENTIAL")
+Top5 = subset(mvt, LocationDescription %in% TopLocations)
+str(Top5)
+# Refresh data for Top5
+Top5$LocationDescription = factor(Top5$LocationDescription)
+t=table(Top5$LocationDescription)
+df1 <- as.data.frame(table(Top5$LocationDescription, Top5$Arrest))
+df2<-rep(as.data.frame(t)[,2],2)
+df <- data.frame(df1, df2)
+df$percentage <- round(df$Freq/df$df2, 3)*100
+colnames(df)[1] = "Location"
+colnames(df)[2] = "Arrest"
+colnames(df)[3] = "Arrests"
+colnames(df)[4] = "Thefts"
+# Subset of a data in which an arrest was made
+T = df[df$Arrest==TRUE,]
+# Sort the subset data in descending order of percentage to find the location at which the highest percentage of arrests were made
+T[order(-T$percentage),][1,]
+# Day of the week in which the most motor vehicle thefts at gas stations happen
+table(Top5$LocationDescription, Top5$Weekday)
+#
+
+levels(Top5$LocationDescription)
+```
+
+## *Exploratory Data Analysis*
+```{r fig.width=8, fig.height=6}
+# Distribution of crime. Study the trend to understand how crime changed over time
+hist(mvt$Date, breaks=100, ylab="Monthly Number of Motor Vehicle Theft")
+```
+
+```{r fig.width=10, fig.height=6}
+# Distribution of crime. Study the trend to understand how crime changed over time
+boxplot(mvt$Date ~ mvt$Arrest)
+```

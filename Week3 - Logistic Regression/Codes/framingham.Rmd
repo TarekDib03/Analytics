@@ -1,0 +1,83 @@
+15.071 - Analytics Edge
+------------------------------------------------------------------
+### The Framingham Heart Study
+### By: Tarek Dib
+### Date: March 22, 2014
+
+## *Introduction*
+The model's main purpose is to predict the 10-year risk of Coronary Heart Disease (CHD). CHD is a disease of the blood vessels supplying the heart. Heart disease has been the leading cause of death worldwide since 1921. In 2008, 7.3 million people died from CHD. The model is built using the following proceedure:
+    Identify risk factors
+    Collect data
+    Predict heart disease
+    Collect more data
+    Validate model
+    Define interventions using model 
+
+# *Independent variables:*
+### *Demographic risk factors*
+    male: sex of patient
+    age: age in years at first examination
+    education: Some high school (1), high school/GED (2), some college/vocational school (3), college (4)
+### *Behavioral risk factors*
+    currentSmoker
+    cigsPerDay: Smoking behavior 
+### *Medical history risk factors*
+    BPmeds: On blood pressure medication at time of first examination
+    prevalentStroke: Previously had a stroke
+    prevalentHyp: Currently hypertensive
+    diabetes: Currently has diabetes 
+### *Risk factors from first examination*
+    totChol: Total cholesterol (mg/dL)
+    sysBP: Systolic blood pressure
+    diaBP: Diastolic blood pressure
+    BMI: Body Mass Index, weight (kg)/height (m)^2
+    heartRate: Heart rate (beats/minute)
+    glucose: Blood glucose level (mg/dL)
+
+
+## *Summary and Classification*
+```{r}
+# Read in the dataset
+#setwd("Analytics/Weeks/Week3/Data")
+framingham = read.csv("framingham.csv")
+
+# Look at structure
+str(framingham)
+
+# Load the library caTools
+library(caTools)
+
+# Randomly split the data into training and testing sets
+set.seed(1000)
+split = sample.split(framingham$TenYearCHD, SplitRatio = 0.65)
+
+# Split up the data using subset
+train = subset(framingham, split==TRUE)
+test = subset(framingham, split==FALSE)
+```
+
+## *The Model, Confusion Matrix and Model Accuracy*
+```{r}
+# Logistic Regression Model
+framinghamLog = glm(TenYearCHD ~ ., data = train, family=binomial)
+summary(framinghamLog)
+
+# Predictions on the test set
+predictTest = predict(framinghamLog, type="response", newdata=test)
+
+# Confusion matrix with threshold of 0.5
+table(test$TenYearCHD, predictTest > 0.5)
+
+# Accuracy
+(1069+11)/(1069+6+187+11)
+
+# Baseline accuracy
+(1069+6)/(1069+6+187+11) 
+```
+
+## *Test AUC*
+```{r}
+library(ROCR)
+ROCRpred = prediction(predictTest, test$TenYearCHD)
+as.numeric(performance(ROCRpred, "auc")@y.values)
+```

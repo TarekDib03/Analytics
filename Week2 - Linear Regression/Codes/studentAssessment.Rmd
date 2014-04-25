@@ -1,0 +1,84 @@
+Climate Change, Analytics Edge, MITx: 15.073x
+========================================================
+### Tarek Dib
+
+## *Intoduction*
+The Programme for International Student Assessment (PISA) is a test given every three years to 15-year-old students from around the world to evaluate their performance in mathematics, reading, and science. This test provides a quantitative way to compare the performance of students from different parts of the world. In this homework assignment, we will predict the reading scores of students from the United States of America on the 2009 PISA exam.
+
+contain information about the demographics and schools for American students taking the exam, derived from 2009 PISA Public-Use Data Files distributed by the United States National Center for Education Statistics (NCES). While the datasets are not supposed to contain identifying information about students taking the test, by using the data you are bound by the NCES data use agreement, which prohibits any attempt to determine the identity of any student in the datasets.
+
+## *Variables*
+    grade: The grade in school of the student (most 15-year-olds in America are in 10th grade)
+    male: Whether the student is male (1/0)
+    raceeth: The race/ethnicity composite of the student
+    preschool: Whether the student attended preschool (1/0)
+    expectBachelors: Whether the student expects to obtain a bachelor's degree (1/0)
+    motherHS: Whether the student's mother completed high school (1/0)
+    motherBachelors: Whether the student's mother obtained a bachelor's degree (1/0)
+    motherWork: Whether the student's mother has part-time or full-time work (1/0)
+    fatherHS: Whether the student's father completed high school (1/0)
+    fatherBachelors: Whether the student's father obtained a bachelor's degree (1/0)
+    fatherWork: Whether the student's father has part-time or full-time work (1/0)
+    selfBornUS: Whether the student was born in the United States of America (1/0)
+    motherBornUS: Whether the student's mother was born in the United States of America (1/0)
+    fatherBornUS: Whether the student's father was born in the United States of America (1/0)
+    englishAtHome: Whether the student speaks English at home (1/0)
+    computerForSchoolwork: Whether the student has access to a computer for schoolwork (1/0)
+    read30MinsADay: Whether the student reads for pleasure for 30 minutes/day (1/0)
+    minutesPerWeekEnglish: The number of minutes per week the student spend in English class
+    studentsInEnglish: The number of students in this student's English class at school
+    schoolHasLibrary: Whether this student's school has a library (1/0)
+    publicSchool: Whether this student attends a public school (1/0)
+    urban: Whether this student's school is in an urban area (1/0)
+    schoolSize: The number of students in this student's school
+    readingScore: The student's reading score, on a 1000-point scale
+
+
+## *Data manipulation*
+
+```{r}
+setwd("Analytics/Weeks/Week2/Data")
+pisaTrain <- read.csv("pisa2009train.csv")
+pisaTest <- read.csv("pisa2009test.csv")
+summary(pisaTrain)
+# Average on the reading score of the students in the training data set
+tapply(pisaTrain$readingScore, pisaTrain$male, mean)
+# Remove missing values
+pisaTrain <- na.omit(pisaTrain)
+pisaTest <- na.omit(pisaTest)
+```
+
+To include unordered factors in a linear regression model, we define one level as the "reference level" and add a binary variable for each of the remaining levels. In this way, a factor with n levels is replaced by n-1 binary variables. The reference level is typically selected to be the most frequently occurring level in the dataset.
+
+As an example, consider the unordered factor variable "color", with levels "red", "green", and "blue". If "green" were the reference level, then we would add binary variables "colorred" and "colorblue" to a linear regression problem. All red examples would have colorred=1 and colorblue=0. All blue examples would have colorred=0 and colorblue=1. All green examples would have colorred=0 and colorblue=0.
+
+Now, consider the variable "raceeth" in our problem, which has levels "American Indian/Alaska Native", "Asian", "Black", "Hispanic", "More than one race", "Native Hawaiian/Other Pacific Islander", and "White". Because it is the most common in our population, we will select White as the reference level.
+
+```{r}
+# Set the reference level for race to white
+pisaTrain$raceeth = relevel(pisaTrain$raceeth, "White")
+pisaTest$raceeth = relevel(pisaTest$raceeth, "White")
+# Build a model to predict the reading score
+lmScore = lm(readingScore ~ ., data=pisaTrain)
+summary(lmScore)
+# Root Mean Square Error of lmScore
+sqrt(mean(lmScore$residuals^2))
+# Or
+SSE = sum((predicted - pisaTrain$readingScore)^2)
+RMSE = sqrt(SSE/lmScore$df.residual)
+# Difference in reading score between students in grade 11 and grade 9
+summary(lmScore)$coef[2,1]*(11-9)
+# Predict reading scores in the test set
+predTest <- predict(lmScore, newdata = pisaTest)
+summary(predTest)
+# SSE on the test set
+SSE <- sum((predTest - pisaTest$readingScore)^2)
+# RMSE
+RMSE = sqrt(SSE/nrow(pisaTest))
+# Predicted test score used in the baseline model
+baseline = mean(pisaTrain$readingScore) 
+# sum of squared errors (SST) of the baseline model on the testing set
+SST = sum((baseline - pisaTest$readingScore)^2)
+```
+
+

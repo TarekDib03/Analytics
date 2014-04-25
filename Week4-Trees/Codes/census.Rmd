@@ -1,0 +1,136 @@
+MITx: 15.071x The Analytics Edge - Predicting Earnings from census data
+========================================================
+# Classification and Regression Tree (CART)
+### Tarek Dib
+### April 6, 2014
+
+### *Itroduction*
+The United States government periodically collects demographic information by conducting a census.
+
+In this problem, we are going to use census information about an individual to predict how much a person earns -- in particular, whether the person earns more than $50,000 per year. This data comes from the UCI Machine Learning Repository.
+
+The file census.csv contains 1994 census data for almost 32,000 individuals in the United States.
+
+The available variables include:
+
+    age = the age of the individual in years
+    workclass = the classification of the individual's working status (does the person work for the federal government, work for the local government, work without pay, and so on)
+    education = the level of education of the individual (e.g., 5th-6th grade, high school graduate, PhD, so on)
+    maritalstatus = the marital status of the individual
+    occupation = the type of work the individual does (e.g., administrative/clerical work, farming/fishing, sales and so on)
+    relationship = relationship of individual to his/her household
+    race = the individual's race
+    sex = the individual's sex
+    capitalgain = the capital gains of the individual in 1994 (from selling an asset such as a stock or bond for more than the original purchase price)
+    capitalloss = the capital losses of the individual in 1994 (from selling an asset such as a stock or bond for less than the original purchase price)
+    hoursperweek = the number of hours the individual works per week
+    nativecountry = the native country of the individual
+    over50k = whether or not the individual earned more than $50,000 in 1994
+
+### *A Logistic Regression Model*
+```{r}
+# Load the dataset into R and convert it to a data frame 
+census <- read.csv("census.csv")
+
+set.seed(2000)
+library(caTools)
+split <- sample.split(census$over50k, SplitRatio=0.6)
+train <- subset(census, split==TRUE)
+test <- subset(census, split==FALSE)
+
+logReg1 <- glm(over50k ~., data = train, family = binomial)
+summary(logReg1)
+
+# Prediction
+pred1 <- predict(logReg1, type="response", newdata=test)
+t1 <- table(test$over50, pred1 >= 0.5)
+# Accuracy
+(t1[1,1]+t1[2,2]) / nrow(test)
+# Baseline model for the testing set
+table(test$over50k)  # <50k is the more frequent, so Accuracy is
+table(test$over50k)[1] / nrow(test)
+
+# AUC
+library(ROCR)
+ROCRpred1 = prediction(pred1, test$over50k)
+as.numeric(performance(ROCRpred1, "auc")@y.values)
+```
+
+# *CART Model*
+We have just seen how the logistic regression model for this data achieves a high accuracy. Moreover, the significances of the variables give us a way to gauge which variables are relevant for this prediction task. However, it is not immediately clear which variables are more important than the others, especially due to the large number of factor variables in this problem.
+
+```{r}
+# Build a regression tree model
+library(rpart)
+library(rpart.plot)
+
+CART1 <- rpart(over50k ~ ., data=train, method="class")
+prp(CART1)
+# Predict making over 50k
+pred2 <- predict(CART1, newdata=test, type="class")
+# Accuracy
+t2 <- table(test$over50k, pred2)
+(t2[1,1] + t2[2,2]) / nrow(test)
+# This highlights a very regular phenomenon when comparing CART and logistic regression. CART often performs a little worse than logistic regression in out-of-sample accuracy. However, as is the case here, the CART model is often much simpler to describe and understand. 
+
+# Performance of the model
+PredictROC = predict(CART1, newdata = test)
+pred = prediction(PredictROC[,2], test$over50k)
+perf = performance(pred, "tpr", "fpr")  #tpr: true positive rate. 
+
+# Compute the AUC
+as.numeric(performance(pred, "auc")@y.values)
+```
+
+# *A Random Forest Model*
+Before building a random forest model, we'll down-sample our training set. While some modern personal computers can build a random forest model on the entire training set, others might run out of memory when trying to train the model since random forests is much more computationally intensive than CART or Logistic Regression. For this reason, before continuing we will define a new training set to be used when building our random forest model, that contains 2000 randomly selected obervations from the original training set.
+
+Random forest models work by building a large collection of trees. As a result, we lose some of the interpretability that comes with CART in terms of seeing how predictions are made and which variables are important. However, we can still compute metrics that give us insight into which variables are important. One metric that we can look at is the number of times, aggregated over all of the trees in the random forest model, that a certain variable is selected for a split.
+
+A different metric we can look at is related to "impurity", which measures how homogenous each bucket or leaf of the tree is. In each tree in the forest, whenever we select a variable and perform a split, the impurity is decreased. Therefore, one way to measure the importance of a variable is to average the reduction in impurity, taken over all the times that variable is selected for splitting in all of the trees in the forest
+```{r}
+library(randomForest)
+set.seed(1)
+# Take a sample of size 2000
+trainSmall = train[sample(nrow(train), 2000), ]
+
+RFTree1 <- randomForest(over50k ~. - nativecountry, data=trainSmall)
+pred3 <- predict(RFTree1, newdata=test)
+# Accuracy
+t3 <- table(test$over50k, pred3)
+(t3[1,1] + t3[2,2]) / nrow(test)
+# metric
+vu = varUsed(RFTree1, count=TRUE)
+vusorted = sort(vu, decreasing = FALSE, index.return = TRUE)
+dotchart(vusorted$x, names(RFTree1$forest$xlevels[vusorted$ix]))
+# Impurity metric
+varImpPlot(RFTree1)
+```
+
+# *Selecting cp by Cross-Validation*
+We now conclude our study of this data set by looking at how CART behaves with different choices of its parameters. Let us select the cp parameter for our CART model using k-fold cross validation, with k = 10 folds
+```{r}
+library(caret)
+library(e1071)
+set.seed(2)
+
+# Define cross-validation experiment
+fitControl = trainControl( method = "cv", number = 10 )
+cartGrid = expand.grid( .cp = seq(0.002,0.1,0.002)) 
+tr <- train(over50k ~ ., data = train, method = "rpart", trControl = fitControl, tuneGrid = cartGrid)
+# Build CART model with cp=0.02
+CART4 = rpart(over50k ~ ., data=train, cp=0.002)
+prp(CART4)
+# Accuracy
+pred6 <- predict(CART4, newdata = test, type="class")
+t4 <- table(test$over50k, pred6)
+(t4[1,1] + t4[2,2])/nrow(test)
+
+# Use only Area as the predictor
+set.seed(111)
+tr1 <- train(Life.Exp ~ Area, data = statedata, method = "rpart", trControl = fitControl, tuneGrid = cartGrid)
+CART5 = rpart(Life.Exp ~ Area, data=statedata, cp=0.01)
+prp(CART5)
+# SSE
+pred7 <- predict(CART5)
+sum((pred7 - statedata$Life.Exp)^2)
